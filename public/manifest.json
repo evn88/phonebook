@@ -1,0 +1,17 @@
+{
+    "name": "Телефонная книга",
+    "short_name": "Контакты",
+    "icons": [
+    {
+    "src": "icon_128.png",
+    "type": "image/png",
+    "sizes": "128x128"
+    }
+    ],
+    "description": "Телефонная книга ПАО Волгоградоблэлектро",
+    "start_url": "https://portal.voel.ru/contacts2/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#1C2022",
+    "theme_color": "#1C2022"
+    }
