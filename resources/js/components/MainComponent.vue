@@ -155,7 +155,11 @@ import { log } from 'util';
                     for(let fkey in this.items.filials){
                         for(let dkey in this.items.filials[fkey].departaments){
                             for(let pkey in this.items.filials[fkey].departaments[dkey].people){
-                                if(this.items.filials[fkey].departaments[dkey].people[pkey].name.toLowerCase().includes(this.search.toLowerCase())){
+                                if(
+                                    this.items.filials[fkey].departaments[dkey].people[pkey].name.toLowerCase().includes(
+                                        this.search.toLowerCase()
+                                    )) 
+                                {
                                 // -------------------------
                                     let fname = this.items.filials[fkey].name 
                                     let dname = this.items.filials[fkey].departaments[dkey].name
