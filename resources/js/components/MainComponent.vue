@@ -5,7 +5,9 @@
             <h2>{{title}}</h2>
         </div>
         <div class="col-3 d-flex align-items-center justify-content-md-end">
-            <a href="#" class="btn btn-light lead" @click="tooggleFilter" :class="{ active: filtersShow }"><i class="fas fa-filter"></i></a> &nbsp;
+            <a href="#" class="btn btn-light lead" @click="tooggleFilter" :class="{ active: filtersShow }">
+                <i class="fas fa-filter"></i>
+            </a> &nbsp;
             <a href="#" class="btn btn-light lead"><i class="far fa-question-circle"></i></a>
         </div>
     </div>
@@ -15,12 +17,20 @@
         <div class="col">
             <form>
                 <div class="form-group">
-                    <input type="search" name="search" class="form-control" placeholder="Поиск" autocomplete="off" autofocus="autofocus" v-model.trim="search">
+                    <input 
+                    type="search" 
+                    name="search" 
+                    class="form-control" 
+                    placeholder="Поиск" 
+                    autocomplete="off" 
+                    autofocus="autofocus" 
+                    v-model="search">
                 </div>
             </form>
         </div>
     </div>
-    {{search}}
+    <!-- {{search}}  -->
+    <p>{{answer}}<p>
 
     <!-- фильтр START -->
     <filterpanel-component :filtersShow="filtersShow" :items="items"></filterpanel-component>
@@ -37,7 +47,7 @@
                 <div class="accordion" id="accordionExample">
                     
                     <!-- начало филиала -->
-                    <div class="card" v-for="(filial, f) in items.filials" v-bind:key="filial.id">
+                    <div class="card" v-for="(filial, f) in filteredResult" v-bind:key="filial.id">
                         <div >
                             <div class="card-header bg-dark text-white">
                                 <div class="row">
@@ -52,7 +62,7 @@
                         </div>
                         
                             <!-- начало группы -->
-                            <div v-for="(departament, d) in items.filials[f].departaments" v-bind:key="departament.id">
+                            <div v-for="(departament, d) in filteredResult[f].departaments" v-bind:key="departament.id">
                                 <div >
                                     <div class="card-header ">
                                         <div class="row">
@@ -63,7 +73,7 @@
                                 
 
                                 <!-- начало контакта -->
-                                <div class="list-group list-group-flush" v-for="people in items.filials[f].departaments[d].people" :key="people.id">
+                                <div class="list-group list-group-flush" v-for="people in filteredResult[f].departaments[d].people" :key="people.id">
                                     <a class="list-group-item list-group-item-action  no-border"
                                         :href="'#collapse-' + people.id"  
                                         :id="'heading-' + people.id"
@@ -99,40 +109,130 @@
 </template>
 
 <script>
-import { setTimeout } from 'timers';
+import { type } from 'os';
+import { log } from 'util';
+// import { setTimeout } from 'timers';
     export default {
         data: function() {
             return {
-                items: [],
+                items: [], //контакты
+                filteredResult: [],
                 title: "Телефонная книга",
                 filtersShow: false,
-                search: null,
+                search: '',
+                answer: "Кого будем искать?",
                 loading: true
             }
         },
-
-
-        created() {
-            },
+        created: function () {
+          // _.debounce — это функция lodash, позволяющая ограничить то,
+          // насколько часто может выполняться определённая операция.
+          // В данном случае мы ограничиваем частоту обращений к yesno.wtf/api,
+          // дожидаясь завершения печати вопроса перед отправкой ajax-запроса.
+          // Узнать больше о функции _.debounce (и её родственнице _.throttle),
+          // можно в документации: https://lodash.com/docs#debounce
+          this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
+        },
         mounted() {
             this.getContactsAsync()
-        },
-        updated() {
-
+            // this.filteredResult = this.items
         },
         watch: {
-            search: (query) => {
-                console.log(this.items)
-               let result = this.items.filter((data)=>{
-                   console.log(data.filials)
-                   return data.filials[0].name.toUpperCase().indexOf(query) !== -1
-               })
-               console.log(result)
-               console.log(query)
-
+            search: function (query, oldQuery) {
+                this.answer = 'Ожидаю, когда вы закончите печатать...'
+                this.debouncedGetAnswer()
             }
         },
         methods: {
+            getAnswer() {
+                // this.filteredResult = this.items.filials
+                if(this.search.length > 0){
+                    this.answer = ''
+                    console.log('search...')
+                    let counter = 0
+                    let filteredItem = []
+                    // console.log("test arr: ", Array.isArray(this.filteredResult[0].departaments))
+                    for(let fkey in this.items.filials){
+                        for(let dkey in this.items.filials[fkey].departaments){
+                            for(let pkey in this.items.filials[fkey].departaments[dkey].people){
+                                if(this.items.filials[fkey].departaments[dkey].people[pkey].name.toLowerCase().includes(this.search.toLowerCase())){
+                                // -------------------------
+                                    let fname = this.items.filials[fkey].name 
+                                    let dname = this.items.filials[fkey].departaments[dkey].name
+                                    console.log(filteredItem.every(e => e.name !== fname ))
+
+                                    // TODO: Нужно попробовать сделать такуюже проверку не только для филиалов
+                                    if(filteredItem.every(function(e){ return e.name !== fname })) 
+                                    {
+                                        filteredItem.push({
+                                            id: this.items.filials[fkey].id,
+                                            name: this.items.filials[fkey].name,
+                                            departaments: [{
+                                                id: this.items.filials[fkey].departaments[dkey].id,
+                                                name: this.items.filials[fkey].departaments[dkey].name,
+                                                people: [{
+                                                    id: this.items.filials[fkey].departaments[dkey].people[pkey].id,
+                                                    name: this.items.filials[fkey].departaments[dkey].people[pkey].name,
+                                                    profession: this.items.filials[fkey].departaments[dkey].people[pkey].profession,
+                                                    tel: this.items.filials[fkey].departaments[dkey].people[pkey].tel
+                                                }]
+                                            }]
+                                        })
+                                    } else {
+                                          // TODO: либо попробовать что то поколдовать с исключением...  
+                                        let fIndex = filteredItem.findIndex( item => item.id == this.items.filials[fkey].id)
+                                        let dIndex = filteredItem[fIndex].departaments.findIndex( 
+                                                item => item.id == this.items.filials[fkey].departaments[dkey].id
+                                            )
+
+                                        if(filteredItem.every(function(e){ 
+                                            return e.departaments.every( function(e) { return e.name !== dname }) 
+                                        })) {
+                                            
+                                            filteredItem[fIndex].departaments.push({
+                                                id: this.items.filials[fkey].departaments[dkey].id,
+                                                name: this.items.filials[fkey].departaments[dkey].name,
+                                                people: [{
+                                                    id: this.items.filials[fkey].departaments[dkey].people[pkey].id,
+                                                    name: this.items.filials[fkey].departaments[dkey].people[pkey].name,
+                                                    profession: this.items.filials[fkey].departaments[dkey].people[pkey].profession,
+                                                    tel: this.items.filials[fkey].departaments[dkey].people[pkey].tel
+                                                }]
+                                            })
+                                        } else {
+                                            filteredItem[fIndex].departaments[dIndex].people.push({
+                                                id: this.items.filials[fkey].departaments[dkey].people[pkey].id,
+                                                name: this.items.filials[fkey].departaments[dkey].people[pkey].name,
+                                                profession: this.items.filials[fkey].departaments[dkey].people[pkey].profession,
+                                                tel: this.items.filials[fkey].departaments[dkey].people[pkey].tel
+                                            })
+                                        }
+                                 
+                                    }
+                                    console.log(
+                                        'нашел: ', this.items.filials[fkey].departaments[dkey].people[pkey].name,
+                                        ' филиал: ', this.items.filials[fkey].id ,this.items.filials[fkey].name , 
+                                        ' отдел: ', this.items.filials[fkey].departaments[dkey].name
+                                    );
+    
+    
+                                // ---------------------------
+    
+                                } 
+                                this.filteredResult = filteredItem
+                                console.log("filtereditem: ", filteredItem)
+                            }
+                        }
+                    }
+                    console.log('counter: ', counter)
+                } else {
+                    // console.log("restore")
+                    console.log('restored: ', this.items.filials)
+                    this.filteredResult = this.items.filials
+                }
+
+
+            },
             tooggleFilter: function(){
                 this.filtersShow = !this.filtersShow
             },
@@ -141,8 +241,8 @@ import { setTimeout } from 'timers';
 
                 try{
                     const {data} = await axios.get('./api/contacts')
-                    // console.log("getPostsAsync", data);
                     this.items = data
+                    this.filteredResult = data.filials
                     this.loading = false
                     return data
                 } catch(error) {

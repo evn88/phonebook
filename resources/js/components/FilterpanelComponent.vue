@@ -3,6 +3,7 @@
         <div class="col-auto my-2">
           <label class="mr-sm-3 sr-only" for="inlineFormCustomSelect">Preference</label>
           <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" v-model="selected_filial">
+            <!-- <option value=null disabled>Филиал...</option> -->
             <option value=null selected>Филиал...</option>
             <option v-for="filial in items.filials" v-bind:value="filial.id" v-bind:key="filial.id">
                 {{ filial.name }}
@@ -24,6 +25,11 @@
           <div class="custom-control custom-checkbox mr-sm-2">
             <input type="checkbox" class="custom-control-input" id="customControlAutosizing" v-model="save_filter_state">
             <label class="custom-control-label" for="customControlAutosizing">Запомнить настройки фильтров</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <div class="custom-control">
+            <button type="button" class="btn btn-outline-dark" @click="reset_filters">Сбросить фильтры</button>
           </div>
         </div>
     </div>
@@ -52,6 +58,14 @@ export default {
                 this.selected_depart = null //сбрасываем значение
             }
         }
+    },
+    methods: {
+      reset_filters: function() {
+        console.log('test')
+        this.selected_filial = null
+        // this.selected_depart = null
+        // this.dep = { departaments: [{ id:null, name: null}] }
+      }
     }
 }
 </script>
