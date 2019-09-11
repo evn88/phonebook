@@ -2,7 +2,7 @@
 <div class="container" id="app">
     <div class="row my-2">
         <div class="col-9">
-            <h2>{{title}}</h2>
+            <h2>{{title}}  &nbsp; <small class="spinner spinner-3" v-show="typing"></small></h2>
         </div>
         <div class="col-3 d-flex align-items-center justify-content-md-end">
             <a href="#" class="btn btn-light lead" @click="tooggleFilter" :class="{ active: filtersShow }">
@@ -16,11 +16,11 @@
     <div class="row">
         <div class="col">
             <form>
-                <div class="form-group">
+                <div class="input-group mb-3">
                     <input 
                     type="search" 
                     name="search" 
-                    class="form-control" 
+                    class="form-control spinner spinner-3 " 
                     placeholder="Поиск" 
                     autocomplete="off" 
                     autofocus="autofocus" 
@@ -29,9 +29,7 @@
             </form>
         </div>
     </div>
-    <!-- {{search}}  -->
-    <p>{{answer}}<p>
-
+ 
     <!-- фильтр START -->
     <filterpanel-component :filtersShow="filtersShow" :items="items"></filterpanel-component>
     <!-- фильтр END -->
@@ -85,7 +83,11 @@
                                         <div class="row">
                                             <div class="col-4">{{ people.name }}</div>
                                             <div class="col-6 text-secondary">{{ people.profession }}</div>
-                                            <div class="col-2 text-right"><i class="fas fa-phone-alt"></i> <b>{{ people.tel }}</b></div>
+                                            <div class="col-2 text-right">
+                                                <span v-show="!people.tel">нет номера</span>
+                                                <i class="fas fa-phone-alt" v-show="people.tel"></i> 
+                                                <b>{{ people.tel }}</b>
+                                            </div>
                                         </div>
                                     </a>
 
@@ -109,8 +111,8 @@
 </template>
 
 <script>
-import { type } from 'os';
-import { log } from 'util';
+// import { type } from 'os';
+// import { log } from 'util';
 // import { setTimeout } from 'timers';
     export default {
         data: function() {
@@ -120,7 +122,7 @@ import { log } from 'util';
                 title: "Телефонная книга",
                 filtersShow: false,
                 search: '',
-                answer: "Кого будем искать?",
+                typing: false,
                 loading: true
             }
         },
@@ -135,37 +137,36 @@ import { log } from 'util';
         },
         mounted() {
             this.getContactsAsync()
-            // this.filteredResult = this.items
         },
         watch: {
             search: function (query, oldQuery) {
-                this.answer = 'Ожидаю, когда вы закончите печатать...'
+                this.typing = true
                 this.debouncedGetAnswer()
             }
         },
         methods: {
             getAnswer() {
-                // this.filteredResult = this.items.filials
                 if(this.search.length > 0){
-                    this.answer = ''
+                    this.typing = false
                     console.log('search...')
                     let counter = 0
                     let filteredItem = []
-                    // console.log("test arr: ", Array.isArray(this.filteredResult[0].departaments))
+
                     for(let fkey in this.items.filials){
                         for(let dkey in this.items.filials[fkey].departaments){
                             for(let pkey in this.items.filials[fkey].departaments[dkey].people){
+                                let people = this.items.filials[fkey].departaments[dkey].people[pkey]
                                 if(
-                                    this.items.filials[fkey].departaments[dkey].people[pkey].name.toLowerCase().includes(
-                                        this.search.toLowerCase()
-                                    )) 
+                                    people.name.toLowerCase().includes(this.search.toLowerCase()) || 
+                                    people.profession.toLowerCase().includes(this.search.toLowerCase()) ||
+                                    people.tel.toLowerCase().includes(this.search.toLowerCase())
+                                ) 
                                 {
                                 // -------------------------
                                     let fname = this.items.filials[fkey].name 
                                     let dname = this.items.filials[fkey].departaments[dkey].name
-                                    console.log(filteredItem.every(e => e.name !== fname ))
 
-                                    // TODO: Нужно попробовать сделать такуюже проверку не только для филиалов
+                                    //если нет дубликатов филиала то просто добавляем объекты в массив
                                     if(filteredItem.every(function(e){ return e.name !== fname })) 
                                     {
                                         filteredItem.push({
@@ -183,16 +184,17 @@ import { log } from 'util';
                                             }]
                                         })
                                     } else {
-                                          // TODO: либо попробовать что то поколдовать с исключением...  
+                                        //если объект филиала уже есть до добавляем отделы
                                         let fIndex = filteredItem.findIndex( item => item.id == this.items.filials[fkey].id)
                                         let dIndex = filteredItem[fIndex].departaments.findIndex( 
                                                 item => item.id == this.items.filials[fkey].departaments[dkey].id
                                             )
 
+                                        //если нет дубликатов отделов
                                         if(filteredItem.every(function(e){ 
                                             return e.departaments.every( function(e) { return e.name !== dname }) 
-                                        })) {
-                                            
+                                        })) 
+                                        {
                                             filteredItem[fIndex].departaments.push({
                                                 id: this.items.filials[fkey].departaments[dkey].id,
                                                 name: this.items.filials[fkey].departaments[dkey].name,
@@ -204,6 +206,7 @@ import { log } from 'util';
                                                 }]
                                             })
                                         } else {
+                                            //если уже есть отдел, то добавляем в него найденных людей
                                             filteredItem[fIndex].departaments[dIndex].people.push({
                                                 id: this.items.filials[fkey].departaments[dkey].people[pkey].id,
                                                 name: this.items.filials[fkey].departaments[dkey].people[pkey].name,
@@ -213,29 +216,22 @@ import { log } from 'util';
                                         }
                                  
                                     }
-                                    console.log(
-                                        'нашел: ', this.items.filials[fkey].departaments[dkey].people[pkey].name,
-                                        ' филиал: ', this.items.filials[fkey].id ,this.items.filials[fkey].name , 
-                                        ' отдел: ', this.items.filials[fkey].departaments[dkey].name
-                                    );
-    
-    
+                                    // console.log(
+                                    //     'нашел: ', this.items.filials[fkey].departaments[dkey].people[pkey].name,
+                                    //     ' филиал: ', this.items.filials[fkey].id ,this.items.filials[fkey].name , 
+                                    //     ' отдел: ', this.items.filials[fkey].departaments[dkey].name
+                                    // );
                                 // ---------------------------
-    
                                 } 
                                 this.filteredResult = filteredItem
-                                console.log("filtereditem: ", filteredItem)
                             }
                         }
                     }
-                    console.log('counter: ', counter)
                 } else {
                     // console.log("restore")
-                    console.log('restored: ', this.items.filials)
                     this.filteredResult = this.items.filials
+                    this.typing = false
                 }
-
-
             },
             tooggleFilter: function(){
                 this.filtersShow = !this.filtersShow
