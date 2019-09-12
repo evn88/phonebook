@@ -29,9 +29,9 @@
             </form>
         </div>
     </div>
- 
+    <p>{{ id_selected_filial }}</p>
     <!-- фильтр START -->
-    <filterpanel-component :filtersShow="filtersShow" :items="items"></filterpanel-component>
+    <filterpanel-component :filtersShow="filtersShow" :items="items" v-on:id-SelectedFilial="onFilterSelectedFilial"></filterpanel-component>
     <!-- фильтр END -->
 
     <div class="row justify-content-md-center my-2" v-if="loading">
@@ -93,7 +93,7 @@
 
                                     <div :id="'collapse-' + people.id" class="collapse" :aria-labelledby="'heading-' + people.id" data-parent="#accordionExample">
                                         <div class="card-body bg-secondary text-light">
-                                            <p class="">Дополнительные параметры</p>
+                                            <h5 class="card-title">Дополнительные параметры</h5>
                                             <p v-if="people.ext_phone"><i class="fas fa-phone-alt"></i> {{ people.ext_phone }}</p>
                                         </div>
                                     </div>
@@ -119,6 +119,7 @@
             return {
                 items: [], //контакты
                 filteredResult: [],
+                id_selected_filial: null,
                 title: "Телефонная книга",
                 filtersShow: false,
                 search: '',
@@ -145,6 +146,9 @@
             }
         },
         methods: {
+            onFilterSelectedFilial(id) {
+                this.id_selected_filial = id
+            },
             getAnswer() {
                 if(this.search.length > 0){
                     this.typing = false
@@ -153,6 +157,8 @@
                     let filteredItem = []
 
                     for(let fkey in this.items.filials){
+                        //TODO: сделать фильтрацию по филиалу. Нужно так же фильтровать при отрисовке списка в шаблоне.
+                        if(this.items.filials[fkey].id == this.id_selected_filial)
                         for(let dkey in this.items.filials[fkey].departaments){
                             for(let pkey in this.items.filials[fkey].departaments[dkey].people){
                                 let people = this.items.filials[fkey].departaments[dkey].people[pkey]

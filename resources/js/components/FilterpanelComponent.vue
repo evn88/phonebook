@@ -54,6 +54,7 @@ export default {
                 this.dep = this.items.filials.filter(function(el){
                     return v === el.id
                 })[0]
+                this.$emit('id-SelectedFilial', this.selected_filial);
             } else {
                 this.selected_depart = null //сбрасываем значение
             }
@@ -63,7 +64,7 @@ export default {
       reset_filters: function() {
         console.log('test')
         this.selected_filial = null
-        // this.selected_depart = null
+        this.selected_depart = null
         // this.dep = { departaments: [{ id:null, name: null}] }
       }
     }
