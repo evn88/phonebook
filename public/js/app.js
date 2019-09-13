@@ -1903,24 +1903,34 @@ __webpack_require__.r(__webpack_exports__);
   props: ['filtersShow', 'items'],
   watch: {
     selected_filial: function selected_filial(v) {
-      // console.log(v)
       if (v !== 'null') {
         this.selected_depart = null; //сбрасываем значение
 
         this.dep = this.items.filials.filter(function (el) {
           return v === el.id;
-        })[0];
+        })[0] || {
+          departaments: [{
+            id: null,
+            name: null
+          }]
+        };
         this.$emit('id-SelectedFilial', this.selected_filial);
       } else {
-        this.selected_depart = null; //сбрасываем значение
+        this.reset_filters();
       }
     }
   },
   methods: {
     reset_filters: function reset_filters() {
-      console.log('test');
+      console.log('reset filter selected');
       this.selected_filial = null;
-      this.selected_depart = null; // this.dep = { departaments: [{ id:null, name: null}] }
+      this.selected_depart = null;
+      this.dep = {
+        departaments: [{
+          id: 0,
+          name: null
+        }]
+      };
     }
   }
 });
@@ -2094,6 +2104,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   methods: {
     onFilterSelectedFilial: function onFilterSelectedFilial(id) {
       this.id_selected_filial = id;
+      this.getAnswer();
     },
     getAnswer: function getAnswer() {
       var _this = this;
@@ -2106,7 +2117,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
         var _loop = function _loop(fkey) {
           //TODO: сделать фильтрацию по филиалу. Нужно так же фильтровать при отрисовке списка в шаблоне.
-          if (_this.items.filials[fkey].id == _this.id_selected_filial) {
+          if (_this.items.filials[fkey].id === _this.id_selected_filial) {
             var _loop2 = function _loop2(dkey) {
               for (var pkey in _this.items.filials[fkey].departaments[dkey].people) {
                 var people = _this.items.filials[fkey].departaments[dkey].people[pkey];
@@ -2192,7 +2203,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       } else {
         // console.log("restore")
-        this.filteredResult = this.items.filials;
+        if (this.id_selected_filial) {
+          var id_s_f = this.id_selected_filial;
+          this.filteredResult = this.items.filials.filter(function (e) {
+            return e.id === id_s_f;
+          });
+        } else {
+          this.filteredResult = this.items.filials;
+        }
+
         this.typing = false;
       }
     },
@@ -44897,8 +44916,6 @@ var render = function() {
           ])
         ])
       ]),
-      _vm._v(" "),
-      _c("p", [_vm._v(_vm._s(_vm.id_selected_filial))]),
       _vm._v(" "),
       _c("filterpanel-component", {
         attrs: { filtersShow: _vm.filtersShow, items: _vm.items },

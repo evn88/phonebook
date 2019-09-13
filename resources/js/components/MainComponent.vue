@@ -29,7 +29,7 @@
             </form>
         </div>
     </div>
-    <p>{{ id_selected_filial }}</p>
+    <!-- <p>{{ id_selected_filial }}</p> -->
     <!-- фильтр START -->
     <filterpanel-component :filtersShow="filtersShow" :items="items" v-on:id-SelectedFilial="onFilterSelectedFilial"></filterpanel-component>
     <!-- фильтр END -->
@@ -148,6 +148,7 @@
         methods: {
             onFilterSelectedFilial(id) {
                 this.id_selected_filial = id
+                this.getAnswer()
             },
             getAnswer() {
                 if(this.search.length > 0){
@@ -158,7 +159,7 @@
 
                     for(let fkey in this.items.filials){
                         //TODO: сделать фильтрацию по филиалу. Нужно так же фильтровать при отрисовке списка в шаблоне.
-                        if(this.items.filials[fkey].id == this.id_selected_filial)
+                        if(this.items.filials[fkey].id === this.id_selected_filial)
                         for(let dkey in this.items.filials[fkey].departaments){
                             for(let pkey in this.items.filials[fkey].departaments[dkey].people){
                                 let people = this.items.filials[fkey].departaments[dkey].people[pkey]
@@ -235,7 +236,12 @@
                     }
                 } else {
                     // console.log("restore")
-                    this.filteredResult = this.items.filials
+                    if(this.id_selected_filial){
+                       let id_s_f = this.id_selected_filial
+                       this.filteredResult = this.items.filials.filter(e => e.id === id_s_f) 
+                    } else {
+                        this.filteredResult = this.items.filials
+                    }
                     this.typing = false
                 }
             },

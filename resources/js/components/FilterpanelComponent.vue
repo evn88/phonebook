@@ -4,7 +4,7 @@
           <label class="mr-sm-3 sr-only" for="inlineFormCustomSelect">Preference</label>
           <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" v-model="selected_filial">
             <!-- <option value=null disabled>Филиал...</option> -->
-            <option value=null selected>Филиал...</option>
+            <option value="null" selected>Филиал...</option>
             <option v-for="filial in items.filials" v-bind:value="filial.id" v-bind:key="filial.id">
                 {{ filial.name }}
             </option>
@@ -13,7 +13,7 @@
         <div class="col-auto my-2">
           <label class="mr-sm-3 sr-only" for="inlineFormCustomSelect">Preference</label>
           <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" v-model="selected_depart">
-            <option value=null selected>Подразделение...</option>
+            <option value="null" selected>Подразделение...</option>
             <option v-for="d in dep.departaments" v-bind:value="d.id" v-bind:key="d.id">
                 {{ d.name }}
             </option>
@@ -48,24 +48,23 @@ export default {
     props: ['filtersShow','items'],
     watch: {
         selected_filial: function(v){
-            // console.log(v)
             if(v !== 'null'){
                 this.selected_depart = null //сбрасываем значение
-                this.dep = this.items.filials.filter(function(el){
+                this.dep = (this.items.filials.filter(function(el){
                     return v === el.id
-                })[0]
+                })[0]) || { departaments: [{ id:null, name: null}] }
                 this.$emit('id-SelectedFilial', this.selected_filial);
             } else {
-                this.selected_depart = null //сбрасываем значение
+                this.reset_filters()
             }
         }
     },
     methods: {
       reset_filters: function() {
-        console.log('test')
+        console.log('reset filter selected')
         this.selected_filial = null
         this.selected_depart = null
-        // this.dep = { departaments: [{ id:null, name: null}] }
+        this.dep = { departaments: [{ id:0, name: null}] }
       }
     }
 }
