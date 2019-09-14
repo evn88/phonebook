@@ -29,44 +29,62 @@ return [
     ],
 
     [
-        'title' => 'Отчет по компьютерам',
+        'title' => 'Контакты',
         'icon'  => 'fa fa-file-text-o',
-        'url'   => '/computer/total',
+        'model' => \App\People::class
     ],
 
     [
-        'title' => 'Отчет по оргтехнике',
+        'title' => 'Филиалы',
         'icon'  => 'fa fa-file-text-o',
-        'url'   => '/orgtech/total',
+        'model' => \App\Filial::class
     ],
 
     [
-        'title' => 'Компьютеры',
-        'icon'  => 'fa fa-desktop',
-        // 'url'   => route('admin.information'),
-        'model'    => \App\Article_pc::class
+        'title' => 'Отделы и службы',
+        'icon'  => 'fa fa-file-text-o',
+        'model' => \App\Departament::class
     ],
 
-    [
-        'title' => 'Оргтехника',
-        'icon'  => 'fa fa-print',
-        // 'url'   => route('admin.information'),
-        'model'    => \App\Article_orgtech::class
-    ],
+    // [
+    //     'title' => 'Отчет по компьютерам',
+    //     'icon'  => 'fa fa-file-text-o',
+    //     'url'   => '/computer/total',
+    // ],
 
-    [
-        'title' => 'Заявки на компьютеры',
-        'icon'  => 'fa fa-desktop',
-        // 'url'   => route('admin.information'),
-        'model'    => \App\Rate_pc::class
-    ],
+    // [
+    //     'title' => 'Отчет по оргтехнике',
+    //     'icon'  => 'fa fa-file-text-o',
+    //     'url'   => '/orgtech/total',
+    // ],
 
-    [
-        'title' => 'Заявки на оргтехнику',
-        'icon'  => 'fa fa-print',
-        // 'url'   => route('admin.information'),
-        'model'    => \App\Rate_orgtech::class
-    ],
+    // [
+    //     'title' => 'Компьютеры',
+    //     'icon'  => 'fa fa-desktop',
+    //     // 'url'   => route('admin.information'),
+    //     'model'    => \App\Article_pc::class
+    // ],
+
+    // [
+    //     'title' => 'Оргтехника',
+    //     'icon'  => 'fa fa-print',
+    //     // 'url'   => route('admin.information'),
+    //     'model'    => \App\Article_orgtech::class
+    // ],
+
+    // [
+    //     'title' => 'Заявки на компьютеры',
+    //     'icon'  => 'fa fa-desktop',
+    //     // 'url'   => route('admin.information'),
+    //     'model'    => \App\Rate_pc::class
+    // ],
+
+    // [
+    //     'title' => 'Заявки на оргтехнику',
+    //     'icon'  => 'fa fa-print',
+    //     // 'url'   => route('admin.information'),
+    //     'model'    => \App\Rate_orgtech::class
+    // ],
 
     [
         'title' => 'Система',
