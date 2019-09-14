@@ -1890,7 +1890,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       selected_filial: null,
-      selected_depart: null,
+      selected_departament: null,
       save_filter_state: false,
       dep: {
         departaments: [{
@@ -1904,7 +1904,7 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     selected_filial: function selected_filial(v) {
       if (v !== 'null') {
-        this.selected_depart = null; //сбрасываем значение
+        this.selected_departament = null; //сбрасываем значение
 
         this.dep = this.items.filials.filter(function (el) {
           return v === el.id;
@@ -1918,13 +1918,20 @@ __webpack_require__.r(__webpack_exports__);
       } else {
         this.reset_filters();
       }
+    },
+    selected_departament: function selected_departament(v) {
+      if (v !== 'null') {
+        this.$emit('id-SelectedDepartament', this.selected_departament);
+      } else {
+        this.selected_departament = null;
+      }
     }
   },
   methods: {
     reset_filters: function reset_filters() {
       console.log('reset filter selected');
       this.selected_filial = null;
-      this.selected_depart = null;
+      this.selected_departament = null;
       this.dep = {
         departaments: [{
           id: 0,
@@ -2066,6 +2073,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 // import { type } from 'os';
 // import { log } from 'util';
 // import { setTimeout } from 'timers';
@@ -2076,6 +2088,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       //контакты
       filteredResult: [],
       id_selected_filial: null,
+      id_selected_departament: null,
       title: "Телефонная книга",
       filtersShow: false,
       search: '',
@@ -2090,7 +2103,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     // дожидаясь завершения печати вопроса перед отправкой ajax-запроса.
     // Узнать больше о функции _.debounce (и её родственнице _.throttle),
     // можно в документации: https://lodash.com/docs#debounce
-    this.debouncedGetAnswer = _.debounce(this.getAnswer, 500);
+    this.debouncedGetAnswer = _.debounce(this.getAnswer, 500); //   this.$cookie.set("test", 13, "expiring time")
   },
   mounted: function mounted() {
     this.getContactsAsync();
@@ -2106,6 +2119,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.id_selected_filial = id;
       this.getAnswer();
     },
+    onFilterSelectedDepartament: function onFilterSelectedDepartament(id) {
+      this.id_selected_departament = id;
+      this.getAnswer();
+    },
     getAnswer: function getAnswer() {
       var _this = this;
 
@@ -2116,85 +2133,100 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var filteredItem = [];
 
         var _loop = function _loop(fkey) {
-          //TODO: сделать фильтрацию по филиалу. Нужно так же фильтровать при отрисовке списка в шаблоне.
-          if (_this.items.filials[fkey].id === _this.id_selected_filial) {
-            var _loop2 = function _loop2(dkey) {
-              for (var pkey in _this.items.filials[fkey].departaments[dkey].people) {
-                var people = _this.items.filials[fkey].departaments[dkey].people[pkey];
+          var _loop2 = function _loop2(dkey) {
+            for (var pkey in _this.items.filials[fkey].departaments[dkey].people) {
+              var people = _this.items.filials[fkey].departaments[dkey].people[pkey];
 
-                if (people.name.toLowerCase().includes(_this.search.toLowerCase()) || people.profession.toLowerCase().includes(_this.search.toLowerCase()) || people.tel.toLowerCase().includes(_this.search.toLowerCase())) {
-                  (function () {
-                    // -------------------------
-                    var fname = _this.items.filials[fkey].name;
-                    var dname = _this.items.filials[fkey].departaments[dkey].name; //если нет дубликатов филиала то просто добавляем объекты в массив
+              if (people.name.toLowerCase().includes(_this.search.toLowerCase()) || people.profession.toLowerCase().includes(_this.search.toLowerCase()) || people.tel.toLowerCase().includes(_this.search.toLowerCase())) {
+                (function () {
+                  // -------------------------
+                  var fname = _this.items.filials[fkey].name;
+                  var dname = _this.items.filials[fkey].departaments[dkey].name; //если нет дубликатов филиала то просто добавляем объекты в массив
 
-                    if (filteredItem.every(function (e) {
-                      return e.name !== fname;
-                    })) {
-                      filteredItem.push({
-                        id: _this.items.filials[fkey].id,
-                        name: _this.items.filials[fkey].name,
-                        departaments: [{
-                          id: _this.items.filials[fkey].departaments[dkey].id,
-                          name: _this.items.filials[fkey].departaments[dkey].name,
-                          people: [{
-                            id: _this.items.filials[fkey].departaments[dkey].people[pkey].id,
-                            name: _this.items.filials[fkey].departaments[dkey].people[pkey].name,
-                            profession: _this.items.filials[fkey].departaments[dkey].people[pkey].profession,
-                            tel: _this.items.filials[fkey].departaments[dkey].people[pkey].tel
-                          }]
-                        }]
-                      });
-                    } else {
-                      //если объект филиала уже есть до добавляем отделы
-                      var fIndex = filteredItem.findIndex(function (item) {
-                        return item.id == _this.items.filials[fkey].id;
-                      });
-                      var dIndex = filteredItem[fIndex].departaments.findIndex(function (item) {
-                        return item.id == _this.items.filials[fkey].departaments[dkey].id;
-                      }); //если нет дубликатов отделов
-
-                      if (filteredItem.every(function (e) {
-                        return e.departaments.every(function (e) {
-                          return e.name !== dname;
-                        });
-                      })) {
-                        filteredItem[fIndex].departaments.push({
-                          id: _this.items.filials[fkey].departaments[dkey].id,
-                          name: _this.items.filials[fkey].departaments[dkey].name,
-                          people: [{
-                            id: _this.items.filials[fkey].departaments[dkey].people[pkey].id,
-                            name: _this.items.filials[fkey].departaments[dkey].people[pkey].name,
-                            profession: _this.items.filials[fkey].departaments[dkey].people[pkey].profession,
-                            tel: _this.items.filials[fkey].departaments[dkey].people[pkey].tel
-                          }]
-                        });
-                      } else {
-                        //если уже есть отдел, то добавляем в него найденных людей
-                        filteredItem[fIndex].departaments[dIndex].people.push({
+                  if (filteredItem.every(function (e) {
+                    return e.name !== fname;
+                  })) {
+                    filteredItem.push({
+                      id: _this.items.filials[fkey].id,
+                      name: _this.items.filials[fkey].name,
+                      departaments: [{
+                        id: _this.items.filials[fkey].departaments[dkey].id,
+                        name: _this.items.filials[fkey].departaments[dkey].name,
+                        people: [{
                           id: _this.items.filials[fkey].departaments[dkey].people[pkey].id,
                           name: _this.items.filials[fkey].departaments[dkey].people[pkey].name,
                           profession: _this.items.filials[fkey].departaments[dkey].people[pkey].profession,
                           tel: _this.items.filials[fkey].departaments[dkey].people[pkey].tel
-                        });
-                      }
-                    } // console.log(
-                    //     'нашел: ', this.items.filials[fkey].departaments[dkey].people[pkey].name,
-                    //     ' филиал: ', this.items.filials[fkey].id ,this.items.filials[fkey].name , 
-                    //     ' отдел: ', this.items.filials[fkey].departaments[dkey].name
-                    // );
-                    // ---------------------------
+                        }]
+                      }]
+                    });
+                  } else {
+                    //если объект филиала уже есть до добавляем отделы
+                    var fIndex = filteredItem.findIndex(function (item) {
+                      return item.id == _this.items.filials[fkey].id;
+                    });
+                    var dIndex = filteredItem[fIndex].departaments.findIndex(function (item) {
+                      return item.id == _this.items.filials[fkey].departaments[dkey].id;
+                    }); //если нет дубликатов отделов
 
-                  })();
-                }
+                    if (filteredItem.every(function (e) {
+                      return e.departaments.every(function (e) {
+                        return e.name !== dname;
+                      });
+                    })) {
+                      filteredItem[fIndex].departaments.push({
+                        id: _this.items.filials[fkey].departaments[dkey].id,
+                        name: _this.items.filials[fkey].departaments[dkey].name,
+                        people: [{
+                          id: _this.items.filials[fkey].departaments[dkey].people[pkey].id,
+                          name: _this.items.filials[fkey].departaments[dkey].people[pkey].name,
+                          profession: _this.items.filials[fkey].departaments[dkey].people[pkey].profession,
+                          tel: _this.items.filials[fkey].departaments[dkey].people[pkey].tel
+                        }]
+                      });
+                    } else {
+                      //если уже есть отдел, то добавляем в него найденных людей
+                      filteredItem[fIndex].departaments[dIndex].people.push({
+                        id: _this.items.filials[fkey].departaments[dkey].people[pkey].id,
+                        name: _this.items.filials[fkey].departaments[dkey].people[pkey].name,
+                        profession: _this.items.filials[fkey].departaments[dkey].people[pkey].profession,
+                        tel: _this.items.filials[fkey].departaments[dkey].people[pkey].tel
+                      });
+                    }
+                  } // console.log(
+                  //     'нашел: ', this.items.filials[fkey].departaments[dkey].people[pkey].name,
+                  //     ' филиал: ', this.items.filials[fkey].id ,this.items.filials[fkey].name , 
+                  //     ' отдел: ', this.items.filials[fkey].departaments[dkey].name
+                  // );
+                  // ---------------------------
 
+                })();
+              } // TODO: Вынеси позже в отдельную функцию
+
+
+              if (_this.id_selected_filial) {
+                // TODO: Разобраться почему не работает с отделами...
+                // console.log("filtered item: ", filteredItem)
+                // let sffilial = filteredItem.filter(e => e.id === this.id_selected_filial) 
+                // if(this.id_selected_departament){
+                //     console.log("sffilial",sffilial)
+                //     this.filteredResult = [{
+                //         id: sffilial.id,
+                //         name: sffilial.name,
+                //         departaments: sffilial.departaments.filter(e => e.id === this.id_selected_departament)
+                //     }]
+                // } else {
+                _this.filteredResult = filteredItem.filter(function (e) {
+                  return e.id === _this.id_selected_filial;
+                }); // }
+              } else {
                 _this.filteredResult = filteredItem;
               }
-            };
-
-            for (var dkey in _this.items.filials[fkey].departaments) {
-              _loop2(dkey);
             }
+          };
+
+          for (var dkey in _this.items.filials[fkey].departaments) {
+            _loop2(dkey);
           }
         };
 
@@ -2202,12 +2234,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           _loop(fkey);
         }
       } else {
-        // console.log("restore")
+        // TODO: Вынеси позже в отдельную функцию
         if (this.id_selected_filial) {
-          var id_s_f = this.id_selected_filial;
-          this.filteredResult = this.items.filials.filter(function (e) {
-            return e.id === id_s_f;
+          var ffilial = this.items.filials.filter(function (e) {
+            return e.id === _this.id_selected_filial;
           });
+
+          if (this.id_selected_departament) {
+            this.filteredResult = [{
+              id: ffilial[0].id,
+              name: ffilial[0].name,
+              departaments: ffilial[0].departaments.filter(function (e) {
+                return e.id === _this.id_selected_departament;
+              })
+            }];
+          } else {
+            this.filteredResult = ffilial;
+          }
         } else {
           this.filteredResult = this.items.filials;
         }
@@ -44709,8 +44752,8 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.selected_depart,
-                expression: "selected_depart"
+                value: _vm.selected_departament,
+                expression: "selected_departament"
               }
             ],
             staticClass: "custom-select mr-sm-2",
@@ -44725,7 +44768,7 @@ var render = function() {
                     var val = "_value" in o ? o._value : o.value
                     return val
                   })
-                _vm.selected_depart = $event.target.multiple
+                _vm.selected_departament = $event.target.multiple
                   ? $$selectedVal
                   : $$selectedVal[0]
               }
@@ -44919,7 +44962,10 @@ var render = function() {
       _vm._v(" "),
       _c("filterpanel-component", {
         attrs: { filtersShow: _vm.filtersShow, items: _vm.items },
-        on: { "id-SelectedFilial": _vm.onFilterSelectedFilial }
+        on: {
+          "id-SelectedFilial": _vm.onFilterSelectedFilial,
+          "id-SelectedDepartament": _vm.onFilterSelectedDepartament
+        }
       }),
       _vm._v(" "),
       _vm.loading

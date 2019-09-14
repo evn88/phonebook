@@ -31,7 +31,12 @@
     </div>
     <!-- <p>{{ id_selected_filial }}</p> -->
     <!-- фильтр START -->
-    <filterpanel-component :filtersShow="filtersShow" :items="items" v-on:id-SelectedFilial="onFilterSelectedFilial"></filterpanel-component>
+    <filterpanel-component 
+        :filtersShow="filtersShow" 
+        :items="items" 
+        v-on:id-SelectedFilial="onFilterSelectedFilial"
+        v-on:id-SelectedDepartament="onFilterSelectedDepartament"
+    ></filterpanel-component>
     <!-- фильтр END -->
 
     <div class="row justify-content-md-center my-2" v-if="loading">
@@ -120,6 +125,7 @@
                 items: [], //контакты
                 filteredResult: [],
                 id_selected_filial: null,
+                id_selected_departament: null,
                 title: "Телефонная книга",
                 filtersShow: false,
                 search: '',
@@ -135,6 +141,7 @@
           // Узнать больше о функции _.debounce (и её родственнице _.throttle),
           // можно в документации: https://lodash.com/docs#debounce
           this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
+        //   this.$cookie.set("test", 13, "expiring time")
         },
         mounted() {
             this.getContactsAsync()
@@ -150,6 +157,10 @@
                 this.id_selected_filial = id
                 this.getAnswer()
             },
+            onFilterSelectedDepartament(id) {
+                this.id_selected_departament = id
+                this.getAnswer()
+            },
             getAnswer() {
                 if(this.search.length > 0){
                     this.typing = false
@@ -157,9 +168,8 @@
                     let counter = 0
                     let filteredItem = []
 
+
                     for(let fkey in this.items.filials){
-                        //TODO: сделать фильтрацию по филиалу. Нужно так же фильтровать при отрисовке списка в шаблоне.
-                        if(this.items.filials[fkey].id === this.id_selected_filial)
                         for(let dkey in this.items.filials[fkey].departaments){
                             for(let pkey in this.items.filials[fkey].departaments[dkey].people){
                                 let people = this.items.filials[fkey].departaments[dkey].people[pkey]
@@ -230,15 +240,43 @@
                                     // );
                                 // ---------------------------
                                 } 
-                                this.filteredResult = filteredItem
+
+                                // TODO: Вынеси позже в отдельную функцию
+                                if(this.id_selected_filial){
+                                    // TODO: Разобраться почему не работает с отделами...
+
+                                    // console.log("filtered item: ", filteredItem)
+                                    // let sffilial = filteredItem.filter(e => e.id === this.id_selected_filial) 
+                                    // if(this.id_selected_departament){
+                                    //     console.log("sffilial",sffilial)
+                                    //     this.filteredResult = [{
+                                    //         id: sffilial.id,
+                                    //         name: sffilial.name,
+                                    //         departaments: sffilial.departaments.filter(e => e.id === this.id_selected_departament)
+                                    //     }]
+                                    // } else {
+                                        this.filteredResult = filteredItem.filter(e => e.id === this.id_selected_filial)
+                                    // }
+                                } else {
+                                    this.filteredResult = filteredItem
+                                }
                             }
                         }
                     }
                 } else {
-                    // console.log("restore")
+
+                    // TODO: Вынеси позже в отдельную функцию
                     if(this.id_selected_filial){
-                       let id_s_f = this.id_selected_filial
-                       this.filteredResult = this.items.filials.filter(e => e.id === id_s_f) 
+                        let ffilial = this.items.filials.filter(e => e.id === this.id_selected_filial)
+                        if(this.id_selected_departament){
+                            this.filteredResult = [{
+                                id: ffilial[0].id,
+                                name: ffilial[0].name,
+                                departaments: ffilial[0].departaments.filter(e => e.id === this.id_selected_departament)
+                            }]
+                        } else {
+                            this.filteredResult = ffilial
+                        }
                     } else {
                         this.filteredResult = this.items.filials
                     }

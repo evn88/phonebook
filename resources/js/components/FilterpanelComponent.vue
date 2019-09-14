@@ -12,7 +12,7 @@
         </div>
         <div class="col-auto my-2">
           <label class="mr-sm-3 sr-only" for="inlineFormCustomSelect">Preference</label>
-          <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" v-model="selected_depart">
+          <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" v-model="selected_departament">
             <option value="null" selected>Подразделение...</option>
             <option v-for="d in dep.departaments" v-bind:value="d.id" v-bind:key="d.id">
                 {{ d.name }}
@@ -40,7 +40,7 @@ export default {
     data: function() {
         return {
             selected_filial: null,
-            selected_depart: null,
+            selected_departament: null,
             save_filter_state: false,
             dep: { departaments: [{ id:null, name: null}] }
         }
@@ -48,22 +48,29 @@ export default {
     props: ['filtersShow','items'],
     watch: {
         selected_filial: function(v){
-            if(v !== 'null'){
-                this.selected_depart = null //сбрасываем значение
-                this.dep = (this.items.filials.filter(function(el){
-                    return v === el.id
-                })[0]) || { departaments: [{ id:null, name: null}] }
-                this.$emit('id-SelectedFilial', this.selected_filial);
-            } else {
-                this.reset_filters()
-            }
+          if(v !== 'null'){
+              this.selected_departament = null //сбрасываем значение
+              this.dep = (this.items.filials.filter(function(el){
+                  return v === el.id
+              })[0]) || { departaments: [{ id:null, name: null}] }
+              this.$emit('id-SelectedFilial', this.selected_filial);
+          } else {
+              this.reset_filters()
+          }
+        },
+        selected_departament: function(v){
+          if(v !== 'null'){
+            this.$emit('id-SelectedDepartament', this.selected_departament);
+          } else {
+            this.selected_departament = null
+          }
         }
     },
     methods: {
       reset_filters: function() {
         console.log('reset filter selected')
         this.selected_filial = null
-        this.selected_depart = null
+        this.selected_departament = null
         this.dep = { departaments: [{ id:0, name: null}] }
       }
     }
