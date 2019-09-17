@@ -9,11 +9,11 @@ class People extends Model
 {
     public function filial()
     {
-        return $this->hasOne('App\Filial');
+        return $this->belongsTo('App\Filial');
     }
 
     public function departament()
     {
-        return $this->hasOne('App\Departament');
+        return $this->belongsTo('App\Departament');
     }
 }

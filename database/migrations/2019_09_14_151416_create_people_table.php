@@ -21,11 +21,11 @@ class CreatePeopleTable extends Migration
             $table->foreign('departament_id')->references('id')->on('departaments');
             $table->text('name');
             $table->text('profession');
-            $table->text('short_number')->comment('короткий номер');
-            $table->text('ext_number')->comment('внешний(городской) номер');
-            $table->text('speed_number')->comment('быстрый набор для ЦРПБ');
-            $table->text('mobile_number')->comment('мобильный');
-            $table->date('birthday');
+            $table->text('short_number')->nullable()->comment('короткий номер');
+            $table->text('ext_number')->nullable()->comment('внешний(городской) номер');
+            $table->text('speed_number')->nullable()->comment('быстрый набор для ЦРПБ');
+            $table->text('mobile_number')->nullable()->comment('мобильный');
+            $table->date('birthday')->nullable();
             $table->integer('order')->default('100');
             $table->softDeletes();
             $table->timestamps();

@@ -21,6 +21,7 @@ AdminSection::registerModel(User::class, function(ModelConfiguration $model){
         $form = AdminForm::panel()
                 ->addBody([
                      AdminFormElement::text('name','Username')->required(),
+                     AdminFormElement::text('password','Пароль')->required(),
                 ]);
         $form->getButtons()->setSaveButtonText('Сохранить')->hideSaveAndCloseButton();
         return $form;

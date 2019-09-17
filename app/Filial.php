@@ -9,6 +9,6 @@ class Filial extends Model
 {
     public function people()
     {
-        return $this->belongsTo('App\People');
+        return $this->hasOne('App\People');
     }
 }

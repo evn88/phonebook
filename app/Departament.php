@@ -7,5 +7,8 @@ use \SleepingOwl\Admin\Traits\OrderableModel;
 
 class Departament extends Model
 {
-    //
+    public function people()
+    {
+        return $this->hasOne('App\People');
+    }
 }

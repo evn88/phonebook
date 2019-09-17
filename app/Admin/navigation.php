@@ -41,7 +41,7 @@ return [
     ],
 
     [
-        'title' => 'Отделы и службы',
+        'title' => 'Подразделения',
         'icon'  => 'fa fa-file-text-o',
         'model' => \App\Departament::class
     ],
