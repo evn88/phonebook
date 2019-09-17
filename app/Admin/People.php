@@ -8,11 +8,11 @@ AdminSection::registerModel(People::class, function(ModelConfiguration $model){
     $model->setTitle('Контакты');
 
     $model->onDisplay(function (){
-        $display = AdminDisplay::datatables();
-        $display->setName('testName');
+        $display = AdminDisplay::datatablesAsync();
+        $display->setName('poeples');
         $display->with('filial','departament');
         // $display->setOrder([[1, 'desc']]);
-        $display->disablePagination(true);
+        // $display->disablePagination(true);
 
         $display->setColumnFilters(
             [
@@ -30,8 +30,14 @@ AdminSection::registerModel(People::class, function(ModelConfiguration $model){
         )->setPlacement('panel.heading');
 
         $display->setFilters([
-            AdminDisplayFilter::field('filial_id')->setTitle('FID [:value]'),
-            AdminDisplayFilter::field('departament_id')->setTitle('DID [:value]')
+            AdminDisplayFilter::field('filial_id')->setTitle(function($id){
+                $filial = Filial::find($id);
+                return "Филиал [ $filial[name] ]";
+            }),
+            AdminDisplayFilter::field('departament_id')->setTitle(function($id){
+                $departament = Departament::find($id);
+                return "Подразделение [ $departament[name] ]";
+            })
         ]);
 
         $display->setColumns([

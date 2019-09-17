@@ -26,6 +26,7 @@ return [
         'title' => 'Назад на сайт',
         'icon'  => 'fa fa-arrow-left',
         'url'   => '/',
+        'priority' => 0,
     ],
 
     [
@@ -86,14 +87,14 @@ return [
     //     'model'    => \App\Rate_orgtech::class
     // ],
 
-    [
-        'title' => 'Система',
-        'pages' => [
-            (new Page(\App\User::class)),
-        ],
-        'icon'  => 'fa fa-cogs',
-        'priority' => 99998,
-    ],
+    // [
+    //     'title' => 'Система',
+    //     'pages' => [
+    //         (new Page(\App\User::class)),
+    //     ],
+    //     'icon'  => 'fa fa-cogs',
+    //     'priority' => 99998,
+    // ],
 
     
         // 'pages' => [
