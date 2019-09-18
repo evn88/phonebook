@@ -63,18 +63,18 @@ AdminSection::registerModel(People::class, function(ModelConfiguration $model){
         $formPrimary = AdminForm::form()->addElement(
             AdminFormElement::columns()
             ->addColumn([
-                AdminFormElement::select('filial_id', 'Филиал', Filial::class)->setDisplay('name')->required()
+                AdminFormElement::select('filial_id', 'Филиал', Filial::class)->setDisplay('name')->required('Необходимо обязательно выбрать филиал')
             ],6)
             ->addColumn([
-                AdminFormElement::select('departament_id', 'Подразделение', Departament::class)->setDisplay('name')->required(),
+                AdminFormElement::select('departament_id', 'Подразделение', Departament::class)->setDisplay('name')->required('Необходимо обязательно выбрать подразделение'),
             ],6)
         )->addElement(
             AdminFormElement::columns()
             ->addColumn([
-                AdminFormElement::text('name', 'ФИО')->required()
+                AdminFormElement::text('name', 'ФИО')->required('Необходимо указать ФИО')
             ],6)
             ->addColumn([
-                AdminFormElement::text('profession','Профессия')->required(),
+                AdminFormElement::text('profession','Должность')->required('Необходимо обязательно указать должность'),
             ],6)
         )->addElement(
             AdminFormElement::columns()
@@ -92,10 +92,13 @@ AdminSection::registerModel(People::class, function(ModelConfiguration $model){
             ],3)
         );
 
-        $formExtension = new \SleepingOwl\Admin\Form\FormElements([ 
-            AdminFormElement::datetime('birthday','День рождения'),
-            // AdminFormElement::wysiwyg('address', 'Address')->required('so sad but this field is empty.')
-        ]);
+        $formExtension = AdminForm::form()->addElement(
+            AdminFormElement::columns()->addColumn(
+            [ 
+                AdminFormElement::datetime('birthday','День рождения'),
+                // AdminFormElement::wysiwyg('address', 'Address')->required('so sad but this field is empty.')
+            ], 6)
+        );
 
         $tabs = AdminDisplay::tabbed();
         $tabs->appendTab($formPrimary, 'Главная');
