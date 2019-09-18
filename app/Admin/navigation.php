@@ -31,19 +31,19 @@ return [
 
     [
         'title' => 'Контакты',
-        'icon'  => 'fa fa-file-text-o',
+        'icon'  => 'fa fa-address-card',
         'model' => \App\People::class
     ],
 
     [
         'title' => 'Филиалы',
-        'icon'  => 'fa fa-file-text-o',
+        'icon'  => 'fa fa-home',
         'model' => \App\Filial::class
     ],
 
     [
         'title' => 'Подразделения',
-        'icon'  => 'fa fa-file-text-o',
+        'icon'  => 'fa fa-users',
         'model' => \App\Departament::class
     ],
 
