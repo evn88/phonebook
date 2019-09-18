@@ -7,14 +7,14 @@ AdminSection::registerModel(Filial::class, function(ModelConfiguration $model){
     $model->setTitle('Справочник филиалов');
 
     $model->onDisplay(function (){
-        $display = AdminDisplay::datatables();
-        $display->setOrder([[2, 'asc']]);
+        $display = AdminDisplay::datatablesAsync();
+        $display->setOrder([[1, 'asc']]);
         $display->disablePagination(true);
 
 
         $display->setColumnFilters(
             [
-                null,
+                // null,
                 AdminColumnFilter::text()->setPlaceholder('Название филиала')->setOperator('begins_with'),
                 null,
                 null,

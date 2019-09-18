@@ -8,13 +8,13 @@ AdminSection::registerModel(Departament::class, function(ModelConfiguration $mod
 
     $model->onDisplay(function (){
         $display = AdminDisplay::datatables();
-        $display->setOrder([[2, 'asc']]);
+        $display->setOrder([[1, 'asc']]);
         $display->disablePagination(true);
 
 
         $display->setColumnFilters(
             [
-                null,
+                // null,
                 AdminColumnFilter::text()->setPlaceholder('Название подразделения')->setOperator('begins_with'),
                 null,
                 null,

@@ -11,20 +11,20 @@ AdminSection::registerModel(People::class, function(ModelConfiguration $model){
         $display = AdminDisplay::datatablesAsync();
         $display->setName('poeples');
         $display->with('filial','departament');
-        // $display->setOrder([[1, 'desc']]);
+        $display->setOrder([[8, 'desc']]);
         // $display->disablePagination(true);
 
         $display->setColumnFilters(
             [
                 null,
-                AdminColumnFilter::text()->setPlaceholder('Филиал')->setOperator('begins_with'),
-                AdminColumnFilter::text()->setPlaceholder('Подразделение')->setOperator('begins_with'),
+                AdminColumnFilter::select()->setModel(new Filial)->setDisplay('name')->setColumnName('filial_id')->setPlaceholder('Филиал не выбран'),
+                AdminColumnFilter::select()->setModel(new Departament)->setDisplay('name')->setColumnName('departament_id')->setPlaceholder('Подразделение не выбрано'),
                 AdminColumnFilter::text()->setPlaceholder('ФИО')->setOperator('begins_with'),
                 AdminColumnFilter::text()->setPlaceholder('Должность')->setOperator('begins_with'),
                 AdminColumnFilter::text()->setPlaceholder('Короткий')->setOperator('begins_with'),
                 AdminColumnFilter::text()->setPlaceholder('Внешний'),
                 AdminColumnFilter::text()->setPlaceholder('Быстрый'),
-                AdminColumnFilter::text()->setPlaceholder('Сортировка'),
+                null,
                 null,
             ]
         )->setPlacement('panel.heading');
