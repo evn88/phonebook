@@ -8,7 +8,7 @@ AdminSection::registerModel(Filial::class, function(ModelConfiguration $model){
 
     $model->onDisplay(function (){
         $display = AdminDisplay::datatablesAsync();
-        $display->setOrder([[1, 'asc']]);
+        $display->setOrder([[2, 'asc']]);
         $display->disablePagination(true);
 
 
@@ -16,6 +16,7 @@ AdminSection::registerModel(Filial::class, function(ModelConfiguration $model){
             [
                 // null,
                 AdminColumnFilter::text()->setPlaceholder('Название филиала')->setOperator('begins_with'),
+                null,
                 null,
                 null,
             ]
@@ -28,6 +29,7 @@ AdminSection::registerModel(Filial::class, function(ModelConfiguration $model){
         $display->setColumns([
                 //    AdminColumn::text('id')->setLabel('fid')->setWidth('80px'),
                    AdminColumn::text('name')->setLabel('Название филиала'),
+                   AdminColumn::text('address')->setLabel('Адрес филиала'),
                    AdminColumn::text('order')->setLabel('Сортировка')->setWidth('100px')
                 ]);
         return $display;
@@ -38,6 +40,7 @@ AdminSection::registerModel(Filial::class, function(ModelConfiguration $model){
         $form = AdminForm::panel();
         $form->setItems([
             AdminFormElement::text('name', 'Название филиала')->required(),
+            AdminFormElement::text('address', 'Адрес филиала'),
             AdminFormElement::text('order','Сортировка')->required()
         ]);
 

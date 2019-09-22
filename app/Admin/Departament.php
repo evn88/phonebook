@@ -8,7 +8,7 @@ AdminSection::registerModel(Departament::class, function(ModelConfiguration $mod
 
     $model->onDisplay(function (){
         $display = AdminDisplay::datatables();
-        $display->setOrder([[1, 'asc']]);
+        $display->setOrder([[2, 'asc']]);
         $display->disablePagination(true);
 
 
@@ -16,6 +16,7 @@ AdminSection::registerModel(Departament::class, function(ModelConfiguration $mod
             [
                 // null,
                 AdminColumnFilter::text()->setPlaceholder('Название подразделения')->setOperator('begins_with'),
+                null,
                 null,
                 null,
             ]
@@ -28,6 +29,7 @@ AdminSection::registerModel(Departament::class, function(ModelConfiguration $mod
         $display->setColumns([
                 //    AdminColumn::text('id')->setLabel('fid')->setWidth('80px'),
                    AdminColumn::text('name')->setLabel('Название подразделения'),
+                   AdminColumn::text('ext_info')->setLabel('Дополнительно'),
                    AdminColumn::text('order')->setLabel('Сортировка')->setWidth('100px')
                 ]);
         return $display;
@@ -38,6 +40,7 @@ AdminSection::registerModel(Departament::class, function(ModelConfiguration $mod
         $form = AdminForm::panel();
         $form->setItems([
             AdminFormElement::text('name', 'Название подразделения')->required(),
+            AdminFormElement::text('ext_info', 'Дополнительная информация'),
             AdminFormElement::text('order','Сортировка')->required()
         ]);
 
