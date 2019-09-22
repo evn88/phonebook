@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Filial;
+use App\Departament;
+use App\People;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -23,8 +26,45 @@ class ContactsController extends Controller
 
     public function json()
     {
-        $path = storage_path()."/app/json/contacts.json";
-        $json = json_decode(file_get_contents($path), true); 
+        // $people = People::has('filial')->get();
+        // dd($people[0]->filial->name);
+        foreach (Filial::with('departament', 'people')->get() as $people)
+        {
+            $json[] = $people;
+        }
+
+        //  $json = '{
+        //     "filials": [
+        //       { 
+        //         "id": 1,
+        //         "name": "ЦРПБ",
+        //         "departaments": [
+        //           {
+        //             "id":1,
+        //             "name": "OIT",
+        //             "people": [
+        //               { "id":1, "name": "Вершков Егор Николаевич", "profession":"Администратор безопасности ИТ", "tel":"1084"},
+        //               { "id":2, "name": "Зубенко Сергей Владимирович", "profession":"Главный инженер", "tel":"1083"}
+        //             ]
+        //           },
+        //           {
+        //             "id":2,
+        //             "name": "Служба связи",
+        //             "people": [
+        //               { "id":3, "name": "Федотов Иван", "profession":"Зам. генерального директора по реализации услуг и правовым вопросам", "tel":"1081"},
+        //               { "id":4, "name": "Мисюряев Михаил", "profession":"Зам. генерального директора по капитальному строительству и общим вопросам", "tel":"1082"},
+        //               { "id":5, "name": "Мисюряев Михаил", "profession":"Зам. генерального директора по капитальному строительству и общим вопросам", "tel":"1082"},
+        //               { "id":6, "name": "Мисюряев Михаил", "profession":"Зам. генерального директора по капитальному строительству и общим вопросам", "tel":"1082"}
+        //             ]
+        //           }
+        //         ]
+        //       }
+        
+        //     ]
+        // }';
+
+        // $path = storage_path()."/app/json/contacts.json";
+        // $json = json_decode(file_get_contents($path), true); 
         // dd($json);
         return $json;
     }

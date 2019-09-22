@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/computers', 'ComputerController@json', ['only' => ['json']]);
-Route::get('/orgtechs', 'OrgtechController@json', ['only' => ['json']]);
+// Route::get('/computers', 'ComputerController@json', ['only' => ['json']]);
+// Route::get('/orgtechs', 'OrgtechController@json', ['only' => ['json']]);
 
 Route::get('/contacts', 'Api\ContactsController@json', ['only' => ['json']]);
