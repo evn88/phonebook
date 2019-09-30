@@ -14,9 +14,14 @@ class Filial extends Model
         return $this->hasOne('App\People');
     }
 
-    public function departament()
+    public function departaments()
     {
-        return $this->belongsTo('App\People', 'id', 'departament_id');
+        return $this->hasMany('App\People');
+    }
+
+    public function departament_people()
+    {
+        return $this->departaments()->attach($departament_id);
     }
 
 }

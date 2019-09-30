@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Filial;
 use App\Departament;
 use App\People;
+use App\FilialDepartamentPeople;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -28,14 +29,88 @@ class ContactsController extends Controller
     {
         // $people = People::has('filial')->get();
         // dd($people[0]->filial->name);
-        foreach (Filial::with('departament', 'people')->get() as $people)
+        $i = 0;
+
+        //TODO: Надо менять структуру отношений, так велосипед выходит :(
+
+        $data = [
+            // 'filials' => [
+            //     [
+            //         'id'=>'0',
+            //         'name'=>'ЦРПБ',
+            //         'departaments'=>[
+            //             [
+            //                 'id'=>'1',
+            //                 'name'=>'Администрация',
+            //                 'people'=>[
+            //                     [
+            //                         'id'=>'1',
+            //                         'name'=>'Egor',
+            //                         'profession'=>'CEO',
+            //                         'tel'=>'1081'
+            //                     ],
+            //                     [
+            //                         'id'=>'2',
+            //                         'name'=>'Serg',
+            //                         'profession'=>'CEO',
+            //                         'tel'=>'1081'
+            //                     ]
+            //                 ]
+            //             ],
+            //             [
+            //                 'id'=>'2',
+            //                 'name'=>'Контрольное управление',
+            //                 'people'=>[
+            //                     [
+            //                         'id'=>'3',
+            //                         'name'=>'Виноградов А.В.',
+            //                         'profession'=>'CEO',
+            //                         'tel'=>'1081'
+            //                     ],
+            //                     [
+            //                         'id'=>'4',
+            //                         'name'=>'Текутов',
+            //                         'profession'=>'CEO',
+            //                         'tel'=>'1081'
+            //                     ]
+            //                 ]
+            //             ]
+            //         ]
+            //     ],
+            //     [
+            //         'id'=>'1',
+            //         'name'=>'ЖМЭС',
+            //     ]
+
+            // ]
+        ];
+        // dd($data);
+
+        $buffer_f = '';
+        $buffer_d = '';
+        foreach (FilialDepartamentPeople::with('filial','departament','people')->get() as $fdp)
         {
-            $json[] = $people;
+            if ($fdp->filial->name === $buffer_f)
+            {
+                $f_key = array_search($fdp->filial->name, array_column($data['filials'], 'name'));
+                $data['filials'][$f_key] = $fdp->filial;
+                // dd($f_key);
+
+            }
+            else
+            {
+                $data['filials'][] = $fdp->filial;
+                $buffer_f = $fdp->filial->name;
+            }
+
+            $i++;
         }
+        // dd($data);
+        $json = $data;
 
         //  $json = '{
         //     "filials": [
-        //       { 
+        //       {
         //         "id": 1,
         //         "name": "ЦРПБ",
         //         "departaments": [
@@ -59,12 +134,12 @@ class ContactsController extends Controller
         //           }
         //         ]
         //       }
-        
+
         //     ]
         // }';
 
         // $path = storage_path()."/app/json/contacts.json";
-        // $json = json_decode(file_get_contents($path), true); 
+        // $json = json_decode(file_get_contents($path), true);
         // dd($json);
         return $json;
     }
@@ -87,7 +162,7 @@ class ContactsController extends Controller
      */
     public function store(Request $request)
     {
-        //        
+        //
     }
 
     /**

@@ -13,6 +13,11 @@ class Departament extends Model
     {
         return $this->hasOne('App\People');
     }
-    
+
+    public function filial()
+    {
+        return $this->belongsTo('App\Filial');
+    }
+
 
 }

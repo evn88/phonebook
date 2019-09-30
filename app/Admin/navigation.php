@@ -46,6 +46,11 @@ return [
         'icon'  => 'fa fa-users',
         'model' => \App\Departament::class
     ],
+    [
+        'title' => 'FDP',
+        'icon'  => 'fa fa-users',
+        'model' => \App\FilialDepartamentPeople::class
+    ],
 
     // [
     //     'title' => 'Отчет по компьютерам',
@@ -96,20 +101,20 @@ return [
     //     'priority' => 99998,
     // ],
 
-    
+
         // 'pages' => [
         //     (new Page(\App\Article_pc::class))->setIcon('fa fa-desktop'),
         // ],
-   
+
     // Examples
     // [
     //    'title' => 'Content',
     //    'pages' => [
-    
+
     //        \App\User::class,
-    
+
     //     //    // or
-    
+
     //     //    (new Page(\App\User::class))
     //     //        ->setPriority(100)
     //     //        ->setIcon('fa fa-user')
@@ -117,15 +122,15 @@ return [
     //     //        ->setAccessLogic(function (Page $page) {
     //     //            return auth()->user()->isSuperAdmin();
     //     //        }),
-    
+
     //     //    // or
-    
+
     //     //    new Page([
     //     //        'title'    => 'News',
     //     //        'priority' => 200,
     //     //        'model'    => \App\News::class
     //     //    ]),
-    
+
     //     //    // or
     //     //    (new Page(/* ... */))->setPages(function (Page $page) {
     //     //        $page->addPage([
@@ -133,12 +138,12 @@ return [
     //     //            'priority' => 100,
     //     //            'model'    => \App\Blog::class
 	// 	// 	      ));
-    
+
 	// 	// 	      $page->addPage(\App\Blog::class);
     // 	//       }),
-    
+
     //     //    // or
-    
+
     //     //    [
     //     //        'title'       => 'News',
     //     //        'priority'    => 300,
@@ -146,9 +151,9 @@ return [
     //     //            return $page->isActive();
     // 	// 	      },
     //     //        'pages'       => [
-    
+
     //     //            // ...
-    
+
     //     //        ]
     //     //    ]
     //    ]
