@@ -88,55 +88,31 @@ class ContactsController extends Controller
 
         $buffer_f = '';
         $buffer_d = '';
-        foreach (FilialDepartamentPeople::with('filial','departament','people')->get() as $fdp)
-        {
-            if ($fdp->filial->name === $buffer_f)
-            {
-                $f_key = array_search($fdp->filial->name, array_column($data['filials'], 'name'));
-                $data['filials'][$f_key] = $fdp->filial;
-                // dd($f_key);
+        $filials = Filial::orderBy('order','asc')->get();
 
-            }
-            else
-            {
-                $data['filials'][] = $fdp->filial;
-                $buffer_f = $fdp->filial->name;
-            }
 
-            $i++;
-        }
-        // dd($data);
+            foreach($filials as $fkey=>$f)
+            {
+                $data['filials'][$fkey] = $f;
+                // echo '<b>'. $f->name . '</b></br>';
+
+                //находим все отделы в филиале, создаем массив ключей
+                $departament_keys = People::where('filial_id', $f->id)->get('departament_id')->groupBy('departament_id')->keys();
+                foreach(Departament::find($departament_keys)->sortBy('order') as $dkey=>$dep){
+                    // print_r($dep->name);
+                    $data['filials'][$fkey]['departaments'][$dkey] = $dep;
+
+                    // echo $dep->name . '<br>';
+                    //находим всех людей
+                    // foreach(People::where('departament_id', $dep->id)->get()->sortByDesc('order') as $pkey=>$p){
+                    //     $data['filials'][$fkey]['departaments'][$dkey]['people'][$pkey] = $p;
+                    //     // echo $p->name . '<br>';
+                    // }
+                }
+            }
+            // dd($data);
         $json = $data;
 
-        //  $json = '{
-        //     "filials": [
-        //       {
-        //         "id": 1,
-        //         "name": "ЦРПБ",
-        //         "departaments": [
-        //           {
-        //             "id":1,
-        //             "name": "OIT",
-        //             "people": [
-        //               { "id":1, "name": "Вершков Егор Николаевич", "profession":"Администратор безопасности ИТ", "tel":"1084"},
-        //               { "id":2, "name": "Зубенко Сергей Владимирович", "profession":"Главный инженер", "tel":"1083"}
-        //             ]
-        //           },
-        //           {
-        //             "id":2,
-        //             "name": "Служба связи",
-        //             "people": [
-        //               { "id":3, "name": "Федотов Иван", "profession":"Зам. генерального директора по реализации услуг и правовым вопросам", "tel":"1081"},
-        //               { "id":4, "name": "Мисюряев Михаил", "profession":"Зам. генерального директора по капитальному строительству и общим вопросам", "tel":"1082"},
-        //               { "id":5, "name": "Мисюряев Михаил", "profession":"Зам. генерального директора по капитальному строительству и общим вопросам", "tel":"1082"},
-        //               { "id":6, "name": "Мисюряев Михаил", "profession":"Зам. генерального директора по капитальному строительству и общим вопросам", "tel":"1082"}
-        //             ]
-        //           }
-        //         ]
-        //       }
-
-        //     ]
-        // }';
 
         // $path = storage_path()."/app/json/contacts.json";
         // $json = json_decode(file_get_contents($path), true);

@@ -9,15 +9,15 @@ class Departament extends Model
 {
     protected $hidden = ['deleted_at','created_at', 'updated_at', 'order'];
 
-    public function people()
-    {
-        return $this->hasOne('App\People');
-    }
+    // public function people()
+    // {
+    //     return $this->hasOne('App\People');
+    // }
 
-    public function filial()
-    {
-        return $this->belongsTo('App\Filial');
-    }
+    // public function filial()
+    // {
+    //     return $this->belongsTo('App\Filial');
+    // }
 
 
 }
