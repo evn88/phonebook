@@ -12,7 +12,7 @@
 - Админка SleepingOWl https://github.com/LaravelRUS/SleepingOwlAdmin
 
 ## Установка
-1. Клонируйте репозиторий <code>git clone https://gitlab.voel.ru/e.vershkov/phonebook.git</code>
+1. Клонируйте репозиторий <code>git clone https://github.com/evn88/phonebook.git</code>
 2. Скопируйте и переименуйте файл <b>.env.example</b>  в <b>.env</b>, далее укажите ваши настройки для БД и вашего почтового сервера, через который будут отправляться сообщения.
 3. <code>composer install</code>
 4. <code>npm install</code>
