@@ -25,99 +25,46 @@ class ContactsController extends Controller
     }
 
 
+    /** Собираем json с данными телефонного справочника для frontend */
     public function json()
     {
-        // $people = People::has('filial')->get();
-        // dd($people[0]->filial->name);
-        $i = 0;
+        $data = [];
 
-        //TODO: Надо менять структуру отношений, так велосипед выходит :(
+        $f_index = $d_index = $p_index = 0;
 
-        $data = [
-            // 'filials' => [
-            //     [
-            //         'id'=>'0',
-            //         'name'=>'ЦРПБ',
-            //         'departaments'=>[
-            //             [
-            //                 'id'=>'1',
-            //                 'name'=>'Администрация',
-            //                 'people'=>[
-            //                     [
-            //                         'id'=>'1',
-            //                         'name'=>'Egor',
-            //                         'profession'=>'CEO',
-            //                         'tel'=>'1081'
-            //                     ],
-            //                     [
-            //                         'id'=>'2',
-            //                         'name'=>'Serg',
-            //                         'profession'=>'CEO',
-            //                         'tel'=>'1081'
-            //                     ]
-            //                 ]
-            //             ],
-            //             [
-            //                 'id'=>'2',
-            //                 'name'=>'Контрольное управление',
-            //                 'people'=>[
-            //                     [
-            //                         'id'=>'3',
-            //                         'name'=>'Виноградов А.В.',
-            //                         'profession'=>'CEO',
-            //                         'tel'=>'1081'
-            //                     ],
-            //                     [
-            //                         'id'=>'4',
-            //                         'name'=>'Текутов',
-            //                         'profession'=>'CEO',
-            //                         'tel'=>'1081'
-            //                     ]
-            //                 ]
-            //             ]
-            //         ]
-            //     ],
-            //     [
-            //         'id'=>'1',
-            //         'name'=>'ЖМЭС',
-            //     ]
-
-            // ]
-        ];
-        // dd($data);
-
-        $buffer_f = '';
-        $buffer_d = '';
         $filials = Filial::orderBy('order','asc')->get();
-
-
             foreach($filials as $fkey=>$f)
             {
-                $data['filials'][$fkey] = $f;
                 // echo '<b>'. $f->name . '</b></br>';
+                $data['filials'][$f_index] = $f->toArray();
 
-                //находим все отделы в филиале, создаем массив ключей
+                //находим все подразделения в филиале, создаем массив ключей
                 $departament_keys = People::where('filial_id', $f->id)->get('departament_id')->groupBy('departament_id')->keys();
-                foreach(Departament::find($departament_keys)->sortBy('order') as $dkey=>$dep){
-                    // print_r($dep->name);
-                    $data['filials'][$fkey]['departaments'][$dkey] = $dep;
+
+                foreach(Departament::find($departament_keys)->sortBy('order') as $dkey=>$dep)
+                {
+                    // print_r($dep->name.'<br>');
+                    //получаем все подразделения
+                    $data['filials'][$f_index]['departaments'][$d_index] = $dep->toArray();
 
                     // echo $dep->name . '<br>';
                     //находим всех людей
-                    // foreach(People::where('departament_id', $dep->id)->get()->sortByDesc('order') as $pkey=>$p){
-                    //     $data['filials'][$fkey]['departaments'][$dkey]['people'][$pkey] = $p;
-                    //     // echo $p->name . '<br>';
-                    // }
+                    foreach(People::where([['departament_id', '=', $dep->id],['filial_id', '=', $f->id]])->get()->sortByDesc('order') as $pkey=>$p)
+                    {
+                        $data['filials'][$f_index]['departaments'][$d_index]['people'][$p_index] = $p->toArray();
+                        // echo $p->name . '<br>';
+                        $p_index++;
+                    }
+                    $d_index++;
                 }
+                $f_index++;
             }
-            // dd($data);
-        $json = $data;
 
-
+        //для отладки:
         // $path = storage_path()."/app/json/contacts.json";
         // $json = json_decode(file_get_contents($path), true);
-        // dd($json);
-        return $json;
+
+        return $data;
     }
 
     /**

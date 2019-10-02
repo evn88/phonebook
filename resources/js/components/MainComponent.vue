@@ -17,13 +17,13 @@
         <div class="col">
             <form>
                 <div class="input-group mb-3">
-                    <input 
-                    type="search" 
-                    name="search" 
-                    class="form-control spinner spinner-3 " 
-                    placeholder="Поиск" 
-                    autocomplete="off" 
-                    autofocus="autofocus" 
+                    <input
+                    type="search"
+                    name="search"
+                    class="form-control spinner spinner-3 "
+                    placeholder="Поиск"
+                    autocomplete="off"
+                    autofocus="autofocus"
                     v-model="search">
                 </div>
             </form>
@@ -31,9 +31,9 @@
     </div>
     <!-- <p>{{ id_selected_filial }}</p> -->
     <!-- фильтр START -->
-    <filterpanel-component 
-        :filtersShow="filtersShow" 
-        :items="items" 
+    <filterpanel-component
+        :filtersShow="filtersShow"
+        :items="items"
         v-on:id-SelectedFilial="onFilterSelectedFilial"
         v-on:id-SelectedDepartament="onFilterSelectedDepartament"
     ></filterpanel-component>
@@ -48,7 +48,7 @@
         <div class="col-12 ">
             <div class="list-group accordion">
                 <div class="accordion" id="accordionExample">
-                    
+
                     <!-- начало филиала -->
                     <div class="card" v-for="(filial, f) in filteredResult" v-bind:key="filial.id">
                         <div >
@@ -60,38 +60,38 @@
                                             <i class="fas fa-phone-alt"></i> Код: (8442); 400075, <i class="fas fa-home"></i> г. Волгоград, ул. Шопена, 13
                                         </small>
                                     </div>
-                                </div>    
+                                </div>
                             </div>
                         </div>
-                        
+
                             <!-- начало группы -->
                             <div v-for="(departament, d) in filteredResult[f].departaments" v-bind:key="departament.id">
                                 <div >
                                     <div class="card-header ">
                                         <div class="row">
                                             <div class="col-12"><b><i class="fas fa-caret-right"></i> {{ departament.name }}</b></div>
-                                        </div>    
+                                        </div>
                                     </div>
                                 </div>
-                                
+
 
                                 <!-- начало контакта -->
                                 <div class="list-group list-group-flush" v-for="people in filteredResult[f].departaments[d].people" :key="people.id">
                                     <a class="list-group-item list-group-item-action  no-border"
-                                        :href="'#collapse-' + people.id"  
+                                        :href="'#collapse-' + people.id"
                                         :id="'heading-' + people.id"
-                                        :data-target="'#collapse-' + people.id" 
+                                        :data-target="'#collapse-' + people.id"
                                         :aria-controls="'collapse-' + people.id"
-                                        data-toggle="collapse" 
+                                        data-toggle="collapse"
                                         aria-expanded="false"
                                         >
                                         <div class="row">
                                             <div class="col-4">{{ people.name }}</div>
                                             <div class="col-6 text-secondary">{{ people.profession }}</div>
                                             <div class="col-2 text-right">
-                                                <span v-show="!people.tel">нет номера</span>
-                                                <i class="fas fa-phone-alt" v-show="people.tel"></i> 
-                                                <b>{{ people.tel }}</b>
+                                                <span v-show="!people.short_number">нет номера</span>
+                                                <i class="fas fa-phone-alt" v-show="people.short_number"></i>
+                                                <b>{{ people.short_number }}</b>
                                             </div>
                                         </div>
                                     </a>
@@ -99,7 +99,10 @@
                                     <div :id="'collapse-' + people.id" class="collapse" :aria-labelledby="'heading-' + people.id" data-parent="#accordionExample">
                                         <div class="card-body bg-secondary text-light">
                                             <h5 class="card-title">Дополнительные параметры</h5>
-                                            <p v-if="people.ext_phone"><i class="fas fa-phone-alt"></i> {{ people.ext_phone }}</p>
+                                            <p v-if="people.ext_number"><i class="fas fa-phone-alt"></i> Внешний номер {{ people.ext_number }}</p>
+                                            <p v-if="people.speed_number"><i class="fas fa-phone-alt"></i> Быстрый набор (ЦРПБ) {{ people.speed_number }}</p>
+                                            <p v-if="people.mobile_number"><i class="fas fa-phone-alt"></i> Мобильный {{ people.mobile_number }}</p>
+                                            <p v-if="people.birthday"><i class="fa fa-birthday-cake" aria-hidden="true"></i> День рождения {{ people.birthday }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -174,17 +177,17 @@
                             for(let pkey in this.items.filials[fkey].departaments[dkey].people){
                                 let people = this.items.filials[fkey].departaments[dkey].people[pkey]
                                 if(
-                                    people.name.toLowerCase().includes(this.search.toLowerCase()) || 
+                                    people.name.toLowerCase().includes(this.search.toLowerCase()) ||
                                     people.profession.toLowerCase().includes(this.search.toLowerCase()) ||
-                                    people.tel.toLowerCase().includes(this.search.toLowerCase())
-                                ) 
+                                    people.short_number.toLowerCase().includes(this.search.toLowerCase())
+                                )
                                 {
                                 // -------------------------
-                                    let fname = this.items.filials[fkey].name 
+                                    let fname = this.items.filials[fkey].name
                                     let dname = this.items.filials[fkey].departaments[dkey].name
 
                                     //если нет дубликатов филиала то просто добавляем объекты в массив
-                                    if(filteredItem.every(function(e){ return e.name !== fname })) 
+                                    if(filteredItem.every(function(e){ return e.name !== fname }))
                                     {
                                         filteredItem.push({
                                             id: this.items.filials[fkey].id,
@@ -196,21 +199,21 @@
                                                     id: this.items.filials[fkey].departaments[dkey].people[pkey].id,
                                                     name: this.items.filials[fkey].departaments[dkey].people[pkey].name,
                                                     profession: this.items.filials[fkey].departaments[dkey].people[pkey].profession,
-                                                    tel: this.items.filials[fkey].departaments[dkey].people[pkey].tel
+                                                    short_number: this.items.filials[fkey].departaments[dkey].people[pkey].short_number
                                                 }]
                                             }]
                                         })
                                     } else {
                                         //если объект филиала уже есть до добавляем отделы
                                         let fIndex = filteredItem.findIndex( item => item.id == this.items.filials[fkey].id)
-                                        let dIndex = filteredItem[fIndex].departaments.findIndex( 
+                                        let dIndex = filteredItem[fIndex].departaments.findIndex(
                                                 item => item.id == this.items.filials[fkey].departaments[dkey].id
                                             )
 
                                         //если нет дубликатов отделов
-                                        if(filteredItem.every(function(e){ 
-                                            return e.departaments.every( function(e) { return e.name !== dname }) 
-                                        })) 
+                                        if(filteredItem.every(function(e){
+                                            return e.departaments.every( function(e) { return e.name !== dname })
+                                        }))
                                         {
                                             filteredItem[fIndex].departaments.push({
                                                 id: this.items.filials[fkey].departaments[dkey].id,
@@ -219,7 +222,7 @@
                                                     id: this.items.filials[fkey].departaments[dkey].people[pkey].id,
                                                     name: this.items.filials[fkey].departaments[dkey].people[pkey].name,
                                                     profession: this.items.filials[fkey].departaments[dkey].people[pkey].profession,
-                                                    tel: this.items.filials[fkey].departaments[dkey].people[pkey].tel
+                                                    short_number: this.items.filials[fkey].departaments[dkey].people[pkey].short_number
                                                 }]
                                             })
                                         } else {
@@ -228,25 +231,25 @@
                                                 id: this.items.filials[fkey].departaments[dkey].people[pkey].id,
                                                 name: this.items.filials[fkey].departaments[dkey].people[pkey].name,
                                                 profession: this.items.filials[fkey].departaments[dkey].people[pkey].profession,
-                                                tel: this.items.filials[fkey].departaments[dkey].people[pkey].tel
+                                                short_number: this.items.filials[fkey].departaments[dkey].people[pkey].short_number
                                             })
                                         }
-                                 
+
                                     }
                                     // console.log(
                                     //     'нашел: ', this.items.filials[fkey].departaments[dkey].people[pkey].name,
-                                    //     ' филиал: ', this.items.filials[fkey].id ,this.items.filials[fkey].name , 
+                                    //     ' филиал: ', this.items.filials[fkey].id ,this.items.filials[fkey].name ,
                                     //     ' отдел: ', this.items.filials[fkey].departaments[dkey].name
                                     // );
                                 // ---------------------------
-                                } 
+                                }
 
                                 // TODO: Вынеси позже в отдельную функцию
                                 if(this.id_selected_filial){
                                     // TODO: Разобраться почему не работает с отделами...
 
                                     // console.log("filtered item: ", filteredItem)
-                                    // let sffilial = filteredItem.filter(e => e.id === this.id_selected_filial) 
+                                    // let sffilial = filteredItem.filter(e => e.id === this.id_selected_filial)
                                     // if(this.id_selected_departament){
                                     //     console.log("sffilial",sffilial)
                                     //     this.filteredResult = [{
@@ -306,14 +309,14 @@
             //         this.$parent.$children.forEach((item, index) => {
             //             console.log(item)
             //             console.log(index)
-            //             console.log(event.currentTarget.parentElement)
+            //             console.log(event.currentTarget.parenshort_numberement)
 
-            //             // if (item.$el.id === event.currentTarget.parentElement.parentElement.id) item.item.active = !item.item.active
+            //             // if (item.$el.id === event.currentTarget.parenshort_numberement.parenshort_numberement.id) item.item.active = !item.item.active
             //             // else item.item.active = false
-            //         }) 
+            //         })
             //     // }
             // },
-            
+
         }
     }
 </script>
