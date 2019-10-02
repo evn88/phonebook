@@ -46,11 +46,7 @@ return [
         'icon'  => 'fa fa-users',
         'model' => \App\Departament::class
     ],
-    [
-        'title' => 'FDP',
-        'icon'  => 'fa fa-users',
-        'model' => \App\FilialDepartamentPeople::class
-    ],
+  
 
     // [
     //     'title' => 'Отчет по компьютерам',

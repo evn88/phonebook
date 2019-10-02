@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Filial;
 use App\Departament;
 use App\People;
-use App\FilialDepartamentPeople;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
