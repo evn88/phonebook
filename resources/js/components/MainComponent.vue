@@ -99,6 +99,7 @@
                                     <div :id="'collapse-' + people.id" class="collapse" :aria-labelledby="'heading-' + people.id" data-parent="#accordionExample">
                                         <div class="card-body bg-secondary text-light">
                                             <h5 class="card-title">Дополнительные параметры</h5>
+                                            <hr class="border-light">
                                             <p v-if="people.ext_number"><i class="fas fa-phone-alt"></i> Внешний номер {{ people.ext_number }}</p>
                                             <p v-if="people.speed_number"><i class="fas fa-phone-alt"></i> Быстрый набор (ЦРПБ) {{ people.speed_number }}</p>
                                             <p v-if="people.mobile_number"><i class="fas fa-phone-alt"></i> Мобильный {{ people.mobile_number }}</p>
@@ -176,6 +177,9 @@
                         for(let dkey in this.items.filials[fkey].departaments){
                             for(let pkey in this.items.filials[fkey].departaments[dkey].people){
                                 let people = this.items.filials[fkey].departaments[dkey].people[pkey]
+
+                                //TODO: нужна проверка на пустое значение
+                                //если пустое значение то будет ошибка при поиске
                                 if(
                                     people.name.toLowerCase().includes(this.search.toLowerCase()) ||
                                     people.profession.toLowerCase().includes(this.search.toLowerCase()) ||

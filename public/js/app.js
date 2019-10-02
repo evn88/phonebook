@@ -2081,6 +2081,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 // import { type } from 'os';
 // import { log } from 'util';
 // import { setTimeout } from 'timers';
@@ -2138,7 +2139,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var _loop = function _loop(fkey) {
           var _loop2 = function _loop2(dkey) {
             for (var pkey in _this.items.filials[fkey].departaments[dkey].people) {
-              var people = _this.items.filials[fkey].departaments[dkey].people[pkey];
+              var people = _this.items.filials[fkey].departaments[dkey].people[pkey]; //TODO: нужна проверка на пустое значение
+              //если пустое значение то будет ошибка при поиске
 
               if (people.name.toLowerCase().includes(_this.search.toLowerCase()) || people.profession.toLowerCase().includes(_this.search.toLowerCase()) || people.short_number.toLowerCase().includes(_this.search.toLowerCase())) {
                 (function () {
@@ -45136,6 +45138,10 @@ var render = function() {
                                             { staticClass: "card-title" },
                                             [_vm._v("Дополнительные параметры")]
                                           ),
+                                          _vm._v(" "),
+                                          _c("hr", {
+                                            staticClass: "border-light"
+                                          }),
                                           _vm._v(" "),
                                           people.ext_number
                                             ? _c("p", [

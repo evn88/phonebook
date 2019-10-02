@@ -8,6 +8,8 @@ use \SleepingOwl\Admin\Traits\OrderableModel;
 class People extends Model
 {
     protected $hidden = ['deleted_at','created_at', 'updated_at', 'order'];
+    protected $dates = ['created_at', 'updated_at', 'birthday'];
+    protected $dateFormat = 'd.m.Y';
 
     public function filial()
     {
@@ -19,9 +21,6 @@ class People extends Model
         return $this->belongsTo('App\Departament');
     }
 
-    // public function departament()
-    // {
-    //     return $this->morphTo();
-    // }
+
 
 }
