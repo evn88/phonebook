@@ -1886,6 +1886,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2142,7 +2159,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               var people = _this.items.filials[fkey].departaments[dkey].people[pkey]; //TODO: нужна проверка на пустое значение
               //если пустое значение то будет ошибка при поиске
 
-              if (people.name.toLowerCase().includes(_this.search.toLowerCase()) || people.profession.toLowerCase().includes(_this.search.toLowerCase()) || people.short_number.toLowerCase().includes(_this.search.toLowerCase())) {
+              if (people.name.toLowerCase().includes(_this.search.toLowerCase()) || people.profession.toLowerCase().includes(_this.search.toLowerCase()) //||
+              // people.short_number.toLowerCase().includes(this.search.toLowerCase())
+              ) {
                 (function () {
                   // -------------------------
                   var fname = _this.items.filials[fkey].name;
@@ -44681,182 +44700,211 @@ var render = function() {
           expression: "filtersShow"
         }
       ],
-      staticClass: "form-row align-items-center"
+      staticClass: "card"
     },
     [
-      _c("div", { staticClass: "col-auto my-2" }, [
-        _c(
-          "label",
-          {
-            staticClass: "mr-sm-3 sr-only",
-            attrs: { for: "inlineFormCustomSelect" }
-          },
-          [_vm._v("Preference")]
-        ),
-        _vm._v(" "),
-        _c(
-          "select",
-          {
-            directives: [
+      _c("div", { staticClass: "card-body" }, [
+        _c("div", { staticClass: "form-row align-items-center" }, [
+          _c("div", { staticClass: "col-auto my-2" }, [
+            _c(
+              "label",
               {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.selected_filial,
-                expression: "selected_filial"
-              }
-            ],
-            staticClass: "custom-select mr-sm-2",
-            attrs: { id: "inlineFormCustomSelect" },
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.selected_filial = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          },
-          [
-            _c("option", { attrs: { value: "null", selected: "" } }, [
-              _vm._v("Филиал...")
-            ]),
+                staticClass: "mr-sm-3 sr-only",
+                attrs: { for: "inlineFormCustomSelect" }
+              },
+              [_vm._v("Preference")]
+            ),
             _vm._v(" "),
-            _vm._l(_vm.items.filials, function(filial) {
-              return _c(
-                "option",
-                { key: filial.id, domProps: { value: filial.id } },
-                [_vm._v("\n            " + _vm._s(filial.name) + "\n        ")]
-              )
-            })
-          ],
-          2
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-auto my-2" }, [
-        _c(
-          "label",
-          {
-            staticClass: "mr-sm-3 sr-only",
-            attrs: { for: "inlineFormCustomSelect" }
-          },
-          [_vm._v("Preference")]
-        ),
-        _vm._v(" "),
-        _c(
-          "select",
-          {
-            directives: [
+            _c(
+              "select",
               {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.selected_departament,
-                expression: "selected_departament"
-              }
-            ],
-            staticClass: "custom-select mr-sm-2",
-            attrs: { id: "inlineFormCustomSelect" },
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.selected_departament = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          },
-          [
-            _c("option", { attrs: { value: "null", selected: "" } }, [
-              _vm._v("Подразделение...")
-            ]),
-            _vm._v(" "),
-            _vm._l(_vm.dep.departaments, function(d) {
-              return _c("option", { key: d.id, domProps: { value: d.id } }, [
-                _vm._v("\n            " + _vm._s(d.name) + "\n        ")
-              ])
-            })
-          ],
-          2
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-auto my-1" }, [
-        _c("div", { staticClass: "custom-control custom-checkbox mr-sm-2" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.save_filter_state,
-                expression: "save_filter_state"
-              }
-            ],
-            staticClass: "custom-control-input",
-            attrs: { type: "checkbox", id: "customControlAutosizing" },
-            domProps: {
-              checked: Array.isArray(_vm.save_filter_state)
-                ? _vm._i(_vm.save_filter_state, null) > -1
-                : _vm.save_filter_state
-            },
-            on: {
-              change: function($event) {
-                var $$a = _vm.save_filter_state,
-                  $$el = $event.target,
-                  $$c = $$el.checked ? true : false
-                if (Array.isArray($$a)) {
-                  var $$v = null,
-                    $$i = _vm._i($$a, $$v)
-                  if ($$el.checked) {
-                    $$i < 0 && (_vm.save_filter_state = $$a.concat([$$v]))
-                  } else {
-                    $$i > -1 &&
-                      (_vm.save_filter_state = $$a
-                        .slice(0, $$i)
-                        .concat($$a.slice($$i + 1)))
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selected_filial,
+                    expression: "selected_filial"
                   }
-                } else {
-                  _vm.save_filter_state = $$c
+                ],
+                staticClass: "custom-select mr-sm-2",
+                attrs: { id: "inlineFormCustomSelect" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selected_filial = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
                 }
-              }
-            }
-          }),
+              },
+              [
+                _c("option", { attrs: { value: "null", selected: "" } }, [
+                  _vm._v("Филиал...")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.items.filials, function(filial) {
+                  return _c(
+                    "option",
+                    { key: filial.id, domProps: { value: filial.id } },
+                    [
+                      _vm._v(
+                        "\r\n                " +
+                          _vm._s(filial.name) +
+                          "\r\n            "
+                      )
+                    ]
+                  )
+                })
+              ],
+              2
+            )
+          ]),
           _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "custom-control-label",
-              attrs: { for: "customControlAutosizing" }
-            },
-            [_vm._v("Запомнить настройки фильтров")]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-3" }, [
-        _c("div", { staticClass: "custom-control" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-outline-dark",
-              attrs: { type: "button" },
-              on: { click: _vm.reset_filters }
-            },
-            [_vm._v("Сбросить фильтры")]
-          )
+          _c("div", { staticClass: "col-auto my-2" }, [
+            _c(
+              "label",
+              {
+                staticClass: "mr-sm-3 sr-only",
+                attrs: { for: "inlineFormCustomSelect" }
+              },
+              [_vm._v("Preference")]
+            ),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selected_departament,
+                    expression: "selected_departament"
+                  }
+                ],
+                staticClass: "custom-select mr-sm-2",
+                attrs: { id: "inlineFormCustomSelect" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.selected_departament = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "null", selected: "" } }, [
+                  _vm._v("Подразделение...")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.dep.departaments, function(d) {
+                  return _c(
+                    "option",
+                    { key: d.id, domProps: { value: d.id } },
+                    [
+                      _vm._v(
+                        "\r\n                " +
+                          _vm._s(d.name) +
+                          "\r\n            "
+                      )
+                    ]
+                  )
+                })
+              ],
+              2
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("hr"),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-row align-items-center" }, [
+          _c("div", { staticClass: "col-6" }, [
+            _c("div", { staticClass: "input-group mb-6" }, [
+              _c(
+                "div",
+                { staticClass: "custom-control custom-checkbox mr-sm-2" },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.save_filter_state,
+                        expression: "save_filter_state"
+                      }
+                    ],
+                    staticClass: "custom-control-input",
+                    attrs: { type: "checkbox", id: "customControlAutosizing" },
+                    domProps: {
+                      checked: Array.isArray(_vm.save_filter_state)
+                        ? _vm._i(_vm.save_filter_state, null) > -1
+                        : _vm.save_filter_state
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.save_filter_state,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 &&
+                              (_vm.save_filter_state = $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              (_vm.save_filter_state = $$a
+                                .slice(0, $$i)
+                                .concat($$a.slice($$i + 1)))
+                          }
+                        } else {
+                          _vm.save_filter_state = $$c
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "custom-control-label",
+                      attrs: { for: "customControlAutosizing" }
+                    },
+                    [_vm._v("Запомнить настройки фильтров")]
+                  )
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-6 " }, [
+            _c("div", { staticClass: "custom-control" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-dark",
+                  attrs: { type: "button" },
+                  on: { click: _vm.reset_filters }
+                },
+                [_vm._v("Сбросить фильтры")]
+              )
+            ])
+          ])
         ])
       ])
     ]

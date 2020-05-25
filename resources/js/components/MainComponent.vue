@@ -182,8 +182,8 @@
                                 //если пустое значение то будет ошибка при поиске
                                 if(
                                     people.name.toLowerCase().includes(this.search.toLowerCase()) ||
-                                    people.profession.toLowerCase().includes(this.search.toLowerCase()) ||
-                                    people.short_number.toLowerCase().includes(this.search.toLowerCase())
+                                    people.profession.toLowerCase().includes(this.search.toLowerCase()) //||
+                                    // people.short_number.toLowerCase().includes(this.search.toLowerCase())
                                 )
                                 {
                                 // -------------------------

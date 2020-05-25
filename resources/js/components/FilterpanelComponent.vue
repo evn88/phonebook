@@ -1,5 +1,8 @@
 <template>
-    <div class="form-row align-items-center" v-show="filtersShow"> <!--  .d-none -->
+<div v-show="filtersShow" class="card">
+ <div class="card-body">
+
+    <div class="form-row align-items-center" > <!--  .d-none -->
         <div class="col-auto my-2">
           <label class="mr-sm-3 sr-only" for="inlineFormCustomSelect">Preference</label>
           <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" v-model="selected_filial">
@@ -21,18 +24,32 @@
             <option value="2">Контрольное управление</option> -->
           </select>
         </div>
-        <div class="col-auto my-1">
-          <div class="custom-control custom-checkbox mr-sm-2">
-            <input type="checkbox" class="custom-control-input" id="customControlAutosizing" v-model="save_filter_state">
-            <label class="custom-control-label" for="customControlAutosizing">Запомнить настройки фильтров</label>
-          </div>
-        </div>
-        <div class="col-3">
-          <div class="custom-control">
-            <button type="button" class="btn btn-outline-dark" @click="reset_filters">Сбросить фильтры</button>
-          </div>
-        </div>
     </div>
+    <hr>
+    <div class="form-row align-items-center">
+        <div class="col-6">
+
+          <div class="input-group mb-6">
+            <div class="custom-control custom-checkbox mr-sm-2">
+              <input type="checkbox" class="custom-control-input" id="customControlAutosizing" v-model="save_filter_state">
+              <label class="custom-control-label" for="customControlAutosizing">Запомнить настройки фильтров</label>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div class="col-6 ">
+            <div class="custom-control">
+              <button type="button" class="btn btn-outline-dark" @click="reset_filters">Сбросить фильтры</button>
+            </div>
+        </div>
+
+    </div>
+
+  </div>
+</div>
+
 </template>
 
 <script>
