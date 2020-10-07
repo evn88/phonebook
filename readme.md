@@ -17,8 +17,9 @@
 3. <code>composer install</code>
 4. <code>npm install</code>
 5. <code>php artisan vendor:publish --tag=assets --force</code>
-6. <code>php artisan migrate</code>
-7. <code>php artisan db:seed</code> <br>После выполнения этой команды будет создан стандартный пользователь для входа в админку:
+6. <code>php artisan key:generate</code>
+7. <code>php artisan migrate</code>
+8. <code>php artisan db:seed</code> <br>После выполнения этой команды будет создан стандартный пользователь для входа в админку:
 
     логин: admin@admin.ru <br>
     пароль: admin
