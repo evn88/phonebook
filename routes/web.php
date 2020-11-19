@@ -22,20 +22,5 @@ use Illuminate\Mail\Mailable;
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('/computer', 'ComputerController', ['only' => [
-    'index', 'store'
-]]);
-Route::resource('/orgtech', 'OrgtechController', ['only' => [
-    'index', 'store'
-]]);
-
-Route::get('/computer/total', 'ComputerController@total');
-Route::get('/orgtech/total', 'OrgtechController@total');
-
-
-Route::get('/mailconfirm/{hash}/{type}/', 'MailController@mailconfirm')->name('mailconfirm');
-
-
-
 Auth::routes();
 
