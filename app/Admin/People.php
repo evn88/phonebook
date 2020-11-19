@@ -94,8 +94,10 @@ AdminSection::registerModel(People::class, function(ModelConfiguration $model){
 
         $formExtension = AdminForm::form()->addElement(
             AdminFormElement::columns()->addColumn(
-            [ 
-                AdminFormElement::datetime('birthday','День рождения'),
+            [
+                AdminFormElement::datetime('birthday','День рождения')
+                    ->setFormat('Y-m-d')
+                    ->setPickerFormat('Y-m-d'),
                 // AdminFormElement::wysiwyg('address', 'Address')->required('so sad but this field is empty.')
             ], 6)
         );
@@ -104,6 +106,6 @@ AdminSection::registerModel(People::class, function(ModelConfiguration $model){
         $tabs->appendTab($formPrimary, 'Главная');
         $tabs->appendTab($formExtension, 'Дополнительно');
 
-        return $tabs;      
-    }); 
+        return $tabs;
+    });
 });
